@@ -1,0 +1,15 @@
+<html>
+    <head>
+        <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+    </head>
+    <body>
+        <table>
+            <tr><td align="right">Achievement Name:</td><td>{{achievement.name}}</td></tr>
+            <tr><td align="right">Size:</td><td>{{achievement.size}}</td></tr>
+            <tr><td align="right">Level:</td><td>{{achievement.level}}</td></tr>
+            <tr><td align="right">Badge:</td><td>{{achievement.badge.name}}</td></tr>
+        </table>
+        <a href="/achievement_edit?key={{achievement.key}}">Edit Achievement Info</a><br/>
+        <a href="/achievement_delete?key={{achievement.key}}">Delete Achievement</a>
+    </body>
+</html>

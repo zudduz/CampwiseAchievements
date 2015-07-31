@@ -1,0 +1,27 @@
+<html>
+    <head>
+        <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+        <title>Sessions List</title>
+    </head>
+    <body>
+        <a href="/session_new">Create a new Session</a><br/>
+        <table border="1">
+            <thead>
+                <tr>
+                    <td>Session Name</td>
+                    <td>Start Date</td>
+                    <td>Campwise Id</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for session in sessions %}
+                    <tr>
+                        <td><a href="/session_view?key={{session.key}}">{{ session.name }}</a></td>
+                        <td>{{ session.startDate }}</td>
+                        <td>{{ session.campwiseId }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </body>
+</html>

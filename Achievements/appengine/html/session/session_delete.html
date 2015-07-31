@@ -1,0 +1,18 @@
+<html>
+    <head>
+        <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+    </head>
+    <body>
+        Do you really want to delete this session?
+        <form action="/session_delete" method="post">
+            <input type="hidden" name="key" value="{{session.key}}"/>
+            <input type="submit" value="Confirm Deletion"/>
+        </form>
+        <a href="/session_view?key={{session.key}}">Cancel</a>
+        <table>
+            <tr><td align="right">Campwise Id:</td><td>{{session.campwiseId}}</td></tr>
+            <tr><td align="right">Session Name:</td><td>{{session.name}}</td></tr>
+            <tr><td align="right">Start Date:</td><td>{{startDateString}}</td></tr>
+        </table>
+    </body>
+</html>

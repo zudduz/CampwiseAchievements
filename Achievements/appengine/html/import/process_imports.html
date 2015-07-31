@@ -1,0 +1,35 @@
+<html>
+    <head>
+        <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+        <title>Import Campers</title>
+        <script type="text/javascript">
+            {% for item in achievementsByBadge.items %}
+                function badge{{forloop.counter}}Check(camperNumber) {
+                    {% for achievement in item.1 %}
+                        document.getElementById('c'+camperNumber+'b{{forloop.parentloop.counter}}a{{forloop.counter}}').checked = true;
+                    {% endfor %}
+                }
+            {% endfor %}
+        </script>
+    </head>
+    <body>
+        <form action="/finalize_import" method="post">
+            {% for iCamper in incomingCampers %}
+                <b>{{ iCamper.firstName }} {{ iCamper.lastName }}</b> born on {{ iCamper.birthDate }} has not been found<br/>
+                {% for item in achievementsByBadge.items %}
+                <a href="javascript:badge{{forloop.counter}}Check({{forloop.parentloop.counter}})">{{ item.0 }}</a><br/>
+                    {% for achievement in item.1 %}
+                        <input type="checkbox" name="camper{{iCamper.key}}" value="{{achievement.key}}" id="c{{forloop.parentloop.parentloop.counter}}b{{forloop.parentloop.counter}}a{{forloop.counter}}">{{ achievement.name }}<br/>
+                    {% endfor %}
+                {% endfor %}
+            {% endfor %}<br/>
+         
+            <hr/>
+            {% for iCamper in existingIncomingCampers %}
+                {{ iCamper.firstName }} {{ iCamper.lastName }} in cabin {{iCamper.cabin}} born on {{ iCamper.birthDate }} has been found<br/>
+            {% endfor %}
+
+            <input type="submit" value="Import Data">
+        </form>
+    </body>
+</html>

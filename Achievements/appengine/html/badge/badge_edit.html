@@ -1,0 +1,20 @@
+<html>
+    <head>
+        <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+    </head>
+    <body>
+        <form action="/badge_edit?key={{badge.key}}" method="post">
+            {% for validationError in validationErrors %}
+                <div class="validationError">{{ validationError }}</div>
+            {% endfor %}
+            {% if validationErrors %}
+                <div>Click the back button to get to get back what you typed<div>
+            {% endif %}
+            <table>
+                <tr><td align="right">Badge Name:</td><td><input type="text" name="name" value="{{badge.name}}"></td></tr>
+                <tr><td align="right">Campwise Id:</td><td><input type="text" name="level" value="{{badge.level}}"></td></tr>
+            </table>
+            <input type="submit" value="Save Badge">
+        </form>
+    </body>
+</html>

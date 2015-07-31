@@ -1,0 +1,64 @@
+<html>
+    <head>
+        <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+        <title>Proposed Schedule</title>
+    </head>
+    <body>
+        <form action="/schedule_finalize" method="post">
+            Session: {{session.name}}<br/>
+            <input type="hidden" name="session" value="{{session.key}}"/>
+                <table border="1">
+                    <thead><tr>
+                        <td>Period</td><td>Achievement Name</td><td>Level</td><td>Group</td><td>Size</td>
+                    </tr></thead>
+                    <tbody>
+                        {% for classInstance in sortedClasses%}
+                            <tr>
+                                <td>{{classInstance.getPeriod}}</td>
+                                <td>{{classInstance.achievement.name}}</td>
+                                <td>{{classInstance.achievement.level}}</td>
+                                <td>{{classInstance.getGroup}}</td>
+                                <td>{{classInstance.getSize}}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <table border="1">
+                    <thead><tr>
+                        <td>Name</td><td>Cabin</td><td>Period</td><td>Achievement</td><td>Group</td>
+                    </tr></thead>
+                    <tbody>
+                        {% for classCamper in classCampers %}
+                            {% for classInstance in classCamper.scheduledClasses.values %}
+                                <tr>
+                                    <td>
+                                        {{classCamper.camper.firstName}} {{classCamper.camper.lastName}}
+                                        <input type="hidden" name="camper|{{forloop.parentloop.counter}}|{{forloop.counter}}" value="{{classCamper.camper.campwiseId}}"/>
+                                    </td>
+                                    <td>{{classCamper.cabin}}<input type="hidden" name="cabin|{{forloop.parentloop.counter}}|{{forloop.counter}}" value="{% if classCamper.cabin %}{{classCamper.cabin}}{% endif %}"/></td>
+                                    <td>{{classInstance.getPeriod}}<input type="hidden" name="period|{{forloop.parentloop.counter}}|{{forloop.counter}}" value="{{classInstance.getPeriod}}"/></td>
+                                    <td>
+                                        <select name="achievement|{{forloop.parentloop.counter}}|{{forloop.counter}}">
+                                            <option value="{{classInstance.achievement.level}}">{{classInstance.achievement.level}} - {{classInstance.achievement.name}}</option>
+                                            {% for achievement in achievements %}
+                                                <option value="{{achievement.level}}">{{achievement.level}} - {{achievement.name}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select name="group|{{forloop.parentloop.counter}}|{{forloop.counter}}">
+                                            <option value="{{classInstance.getGroup}}">{{classInstance.getGroup}}</option>
+                                            <option value="A">A</option>
+                                            <option value="B">B</option>
+                                            <option value="C">C</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            <input type="submit" value="Finalize Schedule">
+        </form>
+    </body>
+</html>

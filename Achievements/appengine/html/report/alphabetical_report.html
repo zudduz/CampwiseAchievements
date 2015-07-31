@@ -1,0 +1,29 @@
+<html>
+    <head>
+        <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+        <title>Achievements Schedule By Camper</title>
+    </head>
+    <body>
+        <table border="1">
+            <thead><tr>
+                    <td>All Campers</td>
+                    {% for period in periods %}
+                        <td align="center">{{period}}</td>
+                    {% endfor %}
+            </tr></thead>
+            <tbody>
+            {% for camper in alphabeticalReportRoot.campers %}
+            <tr>
+                <td>{{camper.camper.lastName}}, {{camper.camper.firstName}}</td>
+                {% for camperAchievement in camper.camperAchievements %}
+                    <td>{{camperAchievement.achievement.name}}-{{camperAchievement.group}}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+            <tr>
+                <td>Total: {{alphabeticalReportRoot.campers|length}}</td><td></td><td></td><td></td>
+            </tr>
+            </tbody>
+        </table><br/><br/>
+    </body>
+</html>

@@ -1,0 +1,32 @@
+<html>
+    <head>
+        <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+    </head>
+    <body>
+        <table>
+            <tr><td align="right">Campwise Id:</td><td>{{camper.campwiseId}}</td></tr>
+            <tr><td align="right">First Name:</td><td>{{camper.firstName}}</td></tr>
+            <tr><td align="right">Last Name:</td><td>{{camper.lastName}}</td></tr>
+            <tr><td align="right">Birth Date:</td><td>{{birthDateString}}</td></tr>
+            <tr><td align="right">Note:</td><td>{{camper.note}}</td></tr>
+        </table>
+        <a href="/camper_edit?key={{camper.key}}">Edit Camper Info</a><br/>
+        <a href="/camper_delete?key={{camper.key}}">Delete Camper</a><br/>
+        <br/>
+        <table border="1">
+            <thead>
+                <tr><td>Achievement Name</td><td>Session Name</td><td>Passed</td></tr>
+            </thead>
+            <tbody>
+                {% for achievement in achievements %}
+                <tr>
+                    <td><a href="/camper_achievement_view?key={{achievement.key}}">{{achievement.achievement.name}}</a></td>
+                    <td>{{achievement.session.name}}</td>
+                    <td>{% if not achievement.passed %}Failed{% endif %}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="/camper_achievement_new?camper_key={{camper.key}}">Enter/Schedule New Achievement for Camper</a><br/>
+    </body>
+</html>

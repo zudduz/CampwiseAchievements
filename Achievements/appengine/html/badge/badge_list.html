@@ -1,0 +1,25 @@
+<html>
+    <head>
+        <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+        <title>Badges List</title>
+    </head>
+    <body>
+        <a href="/badge_new">Create a new Badge</a><br/>
+        <table border="1">
+            <thead>
+                <tr>
+                    <td>Badge Name</td>
+                    <td>Level</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for badge in badges %}
+                    <tr>
+                        <td><a href="/badge_view?key={{badge.key}}">{{ badge.name }}</a></td>
+                        <td>{{ badge.level }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </body>
+</html>

@@ -1,0 +1,21 @@
+<html>
+    <head>
+        <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+    </head>
+    <body>
+        <form action="/session_new" method="post">
+            {% for validationError in validationErrors %}
+                <div class="validationError">{{ validationError }}</div>
+            {% endfor %}
+            {% if validationErrors %}
+                <div>Click the back button to get to get back what you typed<div>
+            {% endif %}
+            <table>
+                <tr><td align="right">Campwise Id:</td><td><input type="text" name="campwiseId">(Optional)</td></tr>
+                <tr><td align="right">Session Name:</td><td><input type="text" name="name"></td></tr>
+                <tr><td align="right">Start Date:</td><td><input type="text" name="startDate">(MM/DD/YYYY) Should be a Sunday</td></tr>
+            </table>
+            <input type="submit" value="Create New Session">
+        </form>
+    </body>
+</html>

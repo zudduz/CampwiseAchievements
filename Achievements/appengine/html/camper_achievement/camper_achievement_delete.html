@@ -1,0 +1,24 @@
+<html>
+    <head>
+        <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+    </head>
+    <body>
+        Do you really want to delete this achievement for this camper?
+        <form action="/camper_achievement_delete" method="post">
+            <input type="hidden" name="key" value="{{camperAchievement.key}}"/>
+            <input type="submit" value="Confirm Deletion"/>
+        </form>
+        <a href="/camper_achievement_view?key={{camperAchievement.key}}">Cancel</a>
+        <table>
+            <tr><td align="right">Camper:</td><td>{{camperAchievement.camper.firstName}} {{camperAchievement.camper.lastName}}</td></tr>
+            <tr><td align="right">Achievement Name:</td><td>{{camperAchievement.achievement.name}}</td></tr>
+            <tr><td align="right">Badge Name:</td><td>{{camperAchievement.achievement.badge.name}}</td></tr>
+            <tr><td align="right">Passed:</td><td>{{camperAchievement.passed}}</td></tr>
+            <tr><td align="right">Session Name:</td><td>{{camperAchievement.session.name}}</td></tr>
+            <tr><td align="right">Cabin:</td><td>{{camperAchievement.cabin}}</td></tr>
+            <tr><td align="right">Session Start Date:</td><td>{{camperAchievement.session.startDate}}</td></tr>
+            <tr><td align="right">Period:</td><td>{{camperAchievement.period}}</td></tr>
+            <tr><td align="right">Group:</td><td>{{camperAchievement.group}}</td></tr>
+        </table>
+    </body>
+</html>

@@ -1,0 +1,28 @@
+<html>
+  <head>
+    <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+  </head>
+  <body>
+      <a href="/camper_new">Create a new camper</a><br/>
+      <a href="/import">Import Campers for a Session</a><br/>
+      Campers for all sessions<br/>
+   <table border="1">
+       <thead>
+           <tr>
+                   <td>Name</td>
+                   <td>Birth Date</td>
+                   <td>Campwise Id</td>
+           </tr>
+       </thead>
+       <tbody>
+           {% for camper in campers %}
+               <tr>
+                   <td><a href="/camper_view?key={{camper.key}}">{{ camper.lastName }}, {{ camper.firstName }}</a></td>
+                   <td>{{ camper.birthDate }}</td>
+                   <td>{{ camper.campwiseId }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+  </body>
+</html>

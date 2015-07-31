@@ -1,0 +1,14 @@
+<html>
+    <head>
+        <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+        <title>Import Campers</title>
+    </head>
+    <body>
+        <form action="/receive_import" method="post">
+            Copy and Paste the contents of the csv file exported from the camper achievement report and click "Import Data"<br/>
+            <textarea name="raw_csv" rows="30" cols="90"></textarea><br/>
+            <input type="submit" value="Import Data">
+        </form>
+        <a href="/clear_imports">Remove all imports</a><br/>
+    </body>
+</html>

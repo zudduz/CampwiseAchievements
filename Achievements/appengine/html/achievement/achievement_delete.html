@@ -1,0 +1,19 @@
+<html>
+    <head>
+        <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+    </head>
+    <body>
+        Do you really want to delete this achievement?
+        <form action="/achievement_delete" method="post">
+            <input type="hidden" name="key" value="{{achievement.key}}"/>
+            <input type="submit" value="Confirm Deletion"/>
+        </form>
+        <a href="/achievement_view?key={{achievement.key}}">Cancel</a>
+        <table>
+            <tr><td align="right">Achievement Name:</td><td>{{achievement.name}}</td></tr>
+            <tr><td align="right">Size:</td><td>{{achievement.size}}</td></tr>
+            <tr><td align="right">Level:</td><td>{{achievement.level}}</td></tr>
+            <tr><td align="right">Badge:</td><td>{{achievement.badge.name}}</td></tr>
+        </table>
+    </body>
+</html>

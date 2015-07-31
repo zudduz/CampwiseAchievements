@@ -1,0 +1,28 @@
+<html>
+    <head>
+        <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+        <title>Achievemnts Schedule By Cabin</title>
+    </head>
+    <body>
+        {% for cabin in cabinReportRoot.cabins %}
+            <table border="1">
+                <thead><tr>
+                        <td>Cabin {{cabin.cabin}} - ({{cabin.campers|length}})</td>
+                        {% for period in periods %}
+                            <td align="center">{{period}}</td>
+                        {% endfor %}
+                </tr></thead>
+                <tbody>
+                {% for camper in cabin.campers %}
+                <tr>
+                    <td>{{camper.camper.firstName}} {{camper.camper.lastName}}</td>
+                    {% for camperAchievement in camper.camperAchievements %}
+                        <td>{{camperAchievement.achievement.name}}-{{camperAchievement.group}}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table><br/><br/>
+        {% endfor %}
+    </body>
+</html>

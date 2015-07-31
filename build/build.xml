@@ -1,0 +1,15 @@
+<project default="publish" name="Campwise Reports" basedir="..">
+
+   <property name="src.dir">CR Reports</property>
+   <property name="target.dir">\Users\Public\Documents\CR Reports</property>
+   <target name="publish" depends="clean, copy">
+   </target>
+   <target name="clean">
+      <delete dir="${target.dir}"/>
+   </target>
+   <target name="copy">
+      <copy todir="${target.dir}">
+         <fileset dir="${src.dir}"/>
+      </copy>
+   </target>
+</project>

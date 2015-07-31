@@ -1,0 +1,20 @@
+<html>
+    <head>
+        <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+    </head>
+    <body>
+        Do you really want to delete this camper?
+        <form action="/camper_delete" method="post">
+            <input type="hidden" name="key" value="{{camper.key}}"/>
+            <input type="submit" value="Confirm Deletion"/>
+        </form>
+        <a href="/camper_view?key={{camper.key}}">Cancel</a>
+        <table>
+            <tr><td align="right">Campwise Id:</td><td>{{camper.campwiseId}}</td></tr>
+            <tr><td align="right">First Name:</td><td>{{camper.firstName}}</td></tr>
+            <tr><td align="right">Last Name:</td><td>{{camper.lastName}}</td></tr>
+            <tr><td align="right">Birth Date:</td><td>{{birthDateString}}</td></tr>
+            <tr><td align="right">Note:</td><td>{{camper.note}}</td></tr>
+        </table>
+    </body>
+</html>

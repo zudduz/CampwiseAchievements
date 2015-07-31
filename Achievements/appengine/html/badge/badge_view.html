@@ -1,0 +1,27 @@
+<html>
+    <head>
+        <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+    </head>
+    <body>
+        <table>
+            <tr><td align="right">Badge Name:</td><td>{{badge.name}}</td></tr>
+            <tr><td align="right">Level:</td><td>{{badge.level}}</td></tr>
+        </table>
+        <br/>
+        <a href="/badge_edit?key={{badge.key}}">Edit Badge Info</a><br/>
+        <a href="/badge_delete?key={{badge.key}}">Delete Badge</a><br/>
+        <br/>
+        Achievements in Badge:
+        <br/>
+        <table border="1">
+            <thead>
+                <tr><td>Name</td><td>Level</td></tr>
+            </thead>
+            <tbody>
+                {% for achievement in achievements %}
+                <tr><td>{{achievement.name}}</td><td>{{achievement.level}}</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </body>
+</html>

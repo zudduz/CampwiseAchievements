@@ -1,0 +1,33 @@
+<html>
+    <head>
+        <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+        <title>Clear Schedule</title>
+    </head>
+    <body>
+        {{session.name}} starting on {{session.startDate}} contains the following existing achievements!!!<br/>
+        <table border="1">
+            <thead><tr>
+                    <td>Camper Name</td><td>Achievement Name</td><td>Level</td><td>Period</td><td>Passed</td><td>Cabin</td><td>Group</td>
+            </tr></thead>
+            <tbody>
+                {% for camperAchievement in camperAchievements%}
+                    <tr>
+                        <td>{{camperAchievement.camper.firstName}} {{camperAchievement.camper.lastName}}</td>
+                        <td>{{camperAchievement.achievement.name}}</td>
+                        <td>{{camperAchievement.achievement.level}}</td>
+                        <td>{{camperAchievement.period}}</td>
+                        <td>{% if not camperAchievement.passed %}Failed{% endif %}</td>
+                        <td>{{camperAchievement.cabin}}</td>
+                        <td>{{camperAchievement.group}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table><br/>
+        In order to correctly schedule for {{session.name}} starting on {{session.startDate}} we must delete all of the above records<br/>
+        <form action="/schedule_clear" method="post">
+            <input type="hidden" name="session" value="{{session.key}}"/>
+            <input type="submit" value="Delete Records"/>
+        </form>
+        <a href="/schedule_start">Cancel</a>
+    </body>
+</html>

@@ -1,0 +1,29 @@
+<html>
+    <head>
+        <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+        <title>Achievements List</title>
+    </head>
+    <body>
+        <a href="/achievement_new">Create a new Achievement</a><br/>
+        <table border="1">
+            <thead>
+                <tr>
+                    <td>Achievement Name</td>
+                    <td>Size</td>
+                    <td>Level</td>
+                    <td>Badge</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for achievement in achievements %}
+                    <tr>
+                        <td><a href="/achievement_view?key={{achievement.key}}">{{ achievement.name }}</a></td>
+                        <td>{{ achievement.size }}</td>
+                        <td>{{ achievement.level }}</td>
+                        <td>{{ achievement.badge.name }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </body>
+</html>

@@ -1,0 +1,17 @@
+<html>
+    <head>
+        <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+    </head>
+    <body>
+        Do you really want to delete this badge?
+        <form action="/badge_delete" method="post">
+            <input type="hidden" name="key" value="{{badge.key}}"/>
+            <input type="submit" value="Confirm Deletion"/>
+        </form>
+        <a href="/badge_view?key={{badge.key}}">Cancel</a>
+        <table>
+            <tr><td align="right">Badge Name:</td><td>{{badge.name}}</td></tr>
+            <tr><td align="right">Level:</td><td>{{badge.level}}</td></tr>
+        </table>
+    </body>
+</html>

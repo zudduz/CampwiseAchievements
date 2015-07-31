@@ -1,0 +1,20 @@
+<html>
+    <head>
+        <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+        <title>Schedule - Start</title>
+    </head>
+    <body>
+        Select a session or <a href="/session_new">Create a new session first</a><br/>
+        <form action="/schedule_review" method="post">
+            <select name="session">
+                {% for session in sessions %}
+                    <option value="{{session.key}}">{{session.name}}</option>
+                {% endfor %}
+            </select>
+            <br/><br/>
+            Copy and Paste the contents of the csv file exported from the camper achievement report and click "Propose Schedule"<br/>
+            <textarea name="raw_csv" rows="30" cols="90"></textarea><br/>
+            <input type="submit" value="Propose Schedule">
+        </form>
+    </body>
+</html>

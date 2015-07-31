@@ -1,0 +1,58 @@
+<html>
+  <head>
+    <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+  </head>
+  <body>
+
+  <a href="/import">Import Campers</a><br/>
+  <a href="/schedule_start">Create Schedule for a Session</a><br/>
+  <a href="/schedule_cabin_update">Update Cabin List for a Session</a><br/>
+  <hr/>
+  <form action="/report_cabin_report" method="post">
+      <select name="session">
+          {% for session in sessions %}
+              <option value="{{session.key}}">{{session.name}}</option>
+          {% endfor %}
+      </select>
+      <input type="submit" value="Run Cabin Report"/>
+  </form>
+  <hr/>
+  <form action="/report_group_report" method="post">
+      <select name="session">
+          {% for session in sessions %}
+              <option value="{{session.key}}">{{session.name}}</option>
+          {% endfor %}
+      </select>
+      <input type="submit" value="Run Group Report"/>
+  </form>
+  <hr/>
+  <form action="/report_medal_report" method="post">
+      <select name="session">
+          {% for session in sessions %}
+              <option value="{{session.key}}">{{session.name}}</option>
+          {% endfor %}
+      </select>
+      <input type="submit" value="Run Medal Report"/>
+  </form>
+  <hr/>
+  <form action="/report_alphabetical_report" method="post">
+      <select name="session">
+          {% for session in sessions %}
+              <option value="{{session.key}}">{{session.name}}</option>
+          {% endfor %}
+      </select>
+      <input type="submit" value="Run Alphabetical Report"/>
+  </form>
+  <hr/>
+  <a href="/camper_list">Campers</a><br/>
+  <a href="/session_list">Sessions</a><br/>
+  <a href="/achievement_list">Achievements</a><br/>
+  <a href="/badge_list">Badges</a><br/>
+  <hr/>
+  Known Issues:<br/>
+  Cabin report renders incorrectly if a camper has an achievement TW but not SM<br/>
+  Campers must maintain the same campwise accounts.  Problems may occur if a camper moves from paper to online registration.<br/>
+
+  </body>
+</html>
+

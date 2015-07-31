@@ -1,0 +1,14 @@
+<html>
+    <head>
+        <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+    </head>
+    <body>
+        <table>
+            <tr><td align="right">Campwise Id:</td><td>{{session.campwiseId}}</td></tr>
+            <tr><td align="right">Session Name:</td><td>{{session.name}}</td></tr>
+            <tr><td align="right">Start Date:</td><td>{{startDateString}}</td></tr>
+        </table>
+        <a href="/session_edit?key={{session.key}}">Edit Session Info</a><br/>
+        <a href="/session_delete?key={{session.key}}">Delete Session</a>
+    </body>
+</html>

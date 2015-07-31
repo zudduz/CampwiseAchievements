@@ -1,0 +1,32 @@
+<html>
+    <head>
+        <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+    </head>
+    <body>
+        <form action="/achievement_edit?key={{achievement.key}}" method="post">
+            {% for validationError in validationErrors %}
+                <div class="validationError">{{ validationError }}</div>
+            {% endfor %}
+            {% if validationErrors %}
+                <div>Click the back button to get to get back what you typed<div>
+            {% endif %}
+            <table>
+                <tr><td align="right">Achievement Name:</td><td><input type="text" name="name" value="{{achievement.name}}"></td></tr>
+                <tr><td align="right">Size:</td><td><input type="text" name="size" value="{{achievement.size}}"></td></tr>
+                <tr><td align="right">Level:</td><td><input type="text" name="level" value="{{achievement.level}}"></td></tr>
+                <tr>
+                    <td align="right">Badge:</td>
+                    <td>
+                        <select name="badge">
+                            <option value="{{achievement.badge.key}}">{{achievement.badge.name}}</option>
+                            {% for badge in badges %}
+                                <option value="{{badge.key}}">{{badge.name}}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+            </table>
+            <input type="submit" value="Save Achievement">
+        </form>
+    </body>
+</html>

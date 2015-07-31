@@ -1,0 +1,21 @@
+<html>
+  <head>
+    <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+  </head>
+  <body>
+      <form action="/camper_edit?key={{camper.key}}" method="post">
+       {% for validationError in validationErrors %}
+       <div class="validationError">{{ validationError }}</div>
+       {% endfor %}
+       {% if validationErrors %}
+       <div>Click the back button to get to get back what you typed<div>
+       {% endif %}
+       Campwise Id: {{camper.campwiseId}}<br/>
+       First Name:<input type="text" name="firstName" value="{{camper.firstName}}"><br/>
+       Last Name:<input type="text" name="lastName" value="{{camper.lastName}}"><br/>
+       Birth Date:<input type="text" name="birthDate" value="{{birthDateString}}">(MM/DD/YYYY)<br/>
+       Note:<textarea name="note" rows="10" cols="30">{{camper.note}}</textarea>
+      <input type="submit" value="Save Camper">
+    </form>
+  </body>
+</html>

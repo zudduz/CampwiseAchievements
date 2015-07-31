@@ -1,0 +1,21 @@
+<html>
+  <head>
+    <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+  </head>
+  <body>
+   <form action="/camper_new" method="post">
+       {% for validationError in validationErrors %}
+       <div class="validationError">{{ validationError }}</div>
+       {% endfor %}
+       {% if validationErrors %}
+       <div>Click the back button to get to get back what you typed<div>
+       {% endif %}
+       Campwise Id:<input type="text" name="campwiseId"><br/>
+       First Name:<input type="text" name="firstName"><br/>
+       Last Name:<input type="text" name="lastName"><br/>
+       Birth Date:<input type="text" name="birthDate">(MM/DD/YYYY)<br/>
+       Note:<textarea name="note" rows="10" cols="30"></textarea>
+      <input type="submit" value="Create New Camper">
+    </form>
+  </body>
+</html>

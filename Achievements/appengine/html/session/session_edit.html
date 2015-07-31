@@ -1,0 +1,21 @@
+<html>
+    <head>
+        <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+    </head>
+    <body>
+        <form action="/session_edit?key={{session.key}}" method="post">
+            {% for validationError in validationErrors %}
+                <div class="validationError">{{ validationError }}</div>
+            {% endfor %}
+            {% if validationErrors %}
+                <div>Click the back button to get to get back what you typed<div>
+            {% endif %}
+            <table>
+                <tr><td align="right">Campwise Id:</td><td><input type="text" name="campwiseId" value="{{session.campwiseId}}"></td></td>
+                <tr><td align="right">Session Name:</td><td><input type="text" name="name" value="{{session.name}}"></td></td>
+                <tr><td align="right">Start Date:</td><td><input type="text" name="startDate" value="{{startDateString}}">(MM/DD/YYYY)</td></td>
+            </table>
+            <input type="submit" value="Save Session">
+        </form>
+    </body>
+</html>
