@@ -6,6 +6,7 @@ import handlers.badge
 import handlers.camper
 import handlers.camper_achievement
 import handlers.camper_import
+import handlers.debug_report
 import handlers.report
 import handlers.schedule
 import handlers.session
@@ -32,6 +33,9 @@ app = webapp2.WSGIApplication(
       ('/report_group_report', handlers.report.ReportGroupReport),
       ('/report_medal_report', handlers.report.ReportMedalReport),
       ('/report_alphabetical_report', handlers.report.ReportAlphabeticalReport),
+      ('/debug_null_ca', handlers.debug_report.DebugNullCA),
+      ('/debug_null_ca_with_names', handlers.debug_report.DebugNullCAWithNames),
+      ('/debug_null_ca_null_periods', handlers.debug_report.DebugNullCANullPeriods),
       ('/camper_list', handlers.camper.CamperList),
       ('/camper_view', handlers.camper.CamperView),
       ('/camper_delete', handlers.camper.CamperDelete),

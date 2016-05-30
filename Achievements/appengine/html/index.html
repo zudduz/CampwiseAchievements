@@ -52,7 +52,32 @@
   Known Issues:<br/>
   Cabin report renders incorrectly if a camper has an achievement TW but not SM<br/>
   Campers must maintain the same campwise accounts.  Problems may occur if a camper moves from paper to online registration.<br/>
-
+  <hr/>
+  <h3>Debug Reports</h3>
+  <form action="/debug_null_ca" method="post">
+      <select name="session">
+          {% for session in sessions %}
+              <option value="{{session.key}}">{{session.name}}</option>
+          {% endfor %}
+      </select>
+      <input type="submit" value="Run Debug Null CamperAchievements"/>
+  </form>
+  <form action="/debug_null_ca_with_names" method="post">
+      <select name="session">
+          {% for session in sessions %}
+              <option value="{{session.key}}">{{session.name}}</option>
+          {% endfor %}
+      </select>
+      <input type="submit" value="Run Debug Null CamperAchievements With Names"/>
+  </form>
+  <form action="/debug_null_ca_null_periods" method="post">
+      <select name="session">
+          {% for session in sessions %}
+              <option value="{{session.key}}">{{session.name}}</option>
+          {% endfor %}
+      </select>
+      <input type="submit" value="Run Debug Null CamperAchievements Null Periods"/>
+  </form>
   </body>
 </html>
 

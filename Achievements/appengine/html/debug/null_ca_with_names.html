@@ -1,0 +1,34 @@
+<html>
+    <head>
+        <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+        <title>Debug Null CamperAchievements</title>
+    </head>
+    <body>
+        <table border="1">
+            <tr>
+                <td>Camper</td>
+                <td>Achievement</td>
+                <td>Session</td>
+                <td>Period</td>
+                <td>Passed</td>
+                <td>Cabin</td>
+                <td>Group</td>
+            </tr>
+            {% for camperAchievement in camperAchievements %}
+            <tr>
+                <td>{{camperAchievement.camper.firstName}} {{camperAchievement.camper.lastName}}</td>
+                <td>{{camperAchievement.achievement.name}}</td>
+                <td>{{camperAchievement.session.name}}</td>
+                <td>{{camperAchievement.period}}</td>
+                <td>{{camperAchievement.passed}}</td>
+                <td>{{camperAchievement.cabin}}</td>
+                <td>{{camperAchievement.group}}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td>List is empty</td>
+            </tr>
+            {% endfor %}
+        </table><br/><br/>
+    </body>
+</html>
