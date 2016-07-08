@@ -29,6 +29,18 @@
                     </tr></thead>
                     <tbody>
                         {% for classCamper in classCampers %}
+                        <tr><td colspan="5">
+                                {{classCamper.camper.firstName}} {{classCamper.camper.lastName}}:
+                                {% for level in achievementLevels %}
+                                    <span
+                                        {% if level in classCamper.completedAchievementLevels%}
+                                            style="color:green;"
+                                        {% endif %}
+                                    >
+                                        {{ level }}
+                                    </span>
+                                {% endfor %}
+                            </td></tr>
                             {% for classInstance in classCamper.scheduledClasses.values %}
                                 <tr>
                                     <td>

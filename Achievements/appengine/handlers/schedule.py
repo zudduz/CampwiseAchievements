@@ -152,7 +152,7 @@ class ScheduleReview(webapp.RequestHandler):
         for achievement in Achievement.gql('order by level'):
             achievements.append(achievement)
         classCampers=sorted(classCampers, key=lambda classCamper: (classCamper.camper.lastName.upper(), classCamper.camper.firstName.upper()))
-        template_values = {'achievements': achievements, 'sortedClasses': sortedClasses, 'classCampers': classCampers, 'classesByPeriodIndex': classesByPeriodIndex, 'session': session}
+        template_values = {'achievements': achievements, 'sortedClasses': sortedClasses, 'classCampers': classCampers, 'classesByPeriodIndex': classesByPeriodIndex, 'session': session, 'achievementLevels': ClassCamper.achievementLevels}
         path = os.path.join(os.path.dirname(__file__), '../html/schedule/schedule_review.html')
         self.response.out.write(template.render(path, template_values))
 
@@ -194,10 +194,12 @@ class ClassInstance:
 
 class ClassCamper:
     achievementsByBadgeLevel = {}
+    achievementLevels = []
     for badge in Badge.gql('order by level'):
         achievementsByBadgeLevel[badge.level] = []
     for achievement in Achievement.gql('order by level'):
         achievementsByBadgeLevel[achievement.badge.level].append(achievement)
+        achievementLevels.append(achievement.level)
 
     def __init__(self, camper, session, cabin):
         self.camper = camper
