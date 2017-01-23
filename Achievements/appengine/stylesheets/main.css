@@ -1,8 +1,25 @@
 body {
   font-family: Verdana, Helvetica, sans-serif;
-  background-color: #DDDDDD;
+  background-color: #F8F8F8;
 }
 
 div.validationError {
-    color:#FF3333
+    color:#FF3333;
+}
+
+.pagebreak {
+    page-break-before: always;
+}
+
+tr:nth-child(even) {
+    background-color: #DDFFDD;
+}
+
+tr:nth-child(odd) {
+    background-color: #FFFFCC;
+}
+
+thead tr:nth-child(1n+0) {
+    font-weight: bold;
+    background-color: inherit;
 }

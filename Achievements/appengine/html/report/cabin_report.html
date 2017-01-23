@@ -5,6 +5,7 @@
     </head>
     <body>
         {% for cabin in cabinReportRoot.cabins %}
+            <hr class="pagebreak"/>
             <table border="1">
                 <thead><tr>
                         <td>Cabin {{cabin.cabin}} - ({{cabin.campers|length}})</td>

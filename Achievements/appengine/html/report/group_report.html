@@ -5,6 +5,7 @@
     </head>
     <body>
         {% for group in groupReportRoot.groups %}
+            <hr class="pagebreak"/>
             {{group.achievement.name}}-{{group.group}}
             <table><tr>
                 {% for period in group.periods %}
