@@ -4,26 +4,31 @@
         <title>Achievements Schedule By Camper</title>
     </head>
     <body>
-        <table border="1">
+        <table border="1" class="report">
             <thead><tr>
                     <td>All Campers</td>
                     {% for period in periods %}
-                        <td align="center">{{period}}</td>
+                        <td>{{period}}</td>
                     {% endfor %}
             </tr></thead>
             <tbody>
             {% for camper in alphabeticalReportRoot.campers %}
             <tr>
                 <td>{{camper.camper.lastName}}, {{camper.camper.firstName}}</td>
-                {% for camperAchievement in camper.camperAchievements %}
-                    <td>{{camperAchievement.achievement.name}}-{{camperAchievement.group}}</td>
+                {% for period in periods %}
+                    <td>
+                        {% for camperAchievement in camper.camperAchievements %}
+                            {% if  camperAchievement.period == period %}
+                                {{camperAchievement.achievement.name}}
+                            {% endif %}
+                        {% endfor %}
+                    </td>
                 {% endfor %}
+
             </tr>
             {% endfor %}
-            <tr>
-                <td>Total: {{alphabeticalReportRoot.campers|length}}</td><td></td><td></td><td></td>
-            </tr>
             </tbody>
-        </table><br/><br/>
+        </table><br/>
+        Total: {{alphabeticalReportRoot.campers|length}}
     </body>
 </html>

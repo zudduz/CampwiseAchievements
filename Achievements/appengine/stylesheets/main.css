@@ -23,3 +23,11 @@ thead tr:nth-child(1n+0) {
     font-weight: bold;
     background-color: inherit;
 }
+
+thead td {
+    text-align: center;
+}
+
+table.report td {
+    width: 200px;
+}

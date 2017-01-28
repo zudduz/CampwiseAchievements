@@ -7,8 +7,9 @@ from models.model import *
 import util
 
 
-periods = ['SM', 'TW', 'RF']
-groups = ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H')
+periods = ('SM', 'TW', 'RF')
+
+########################################################################################################################
 class ReportCabinReport(webapp.RequestHandler):
     def post(self):
         session = Session.get(self.request.get('session'))
@@ -49,6 +50,7 @@ class CabinReportCamper:
     def addCamperAchievement(self, camperAchievement):
         self.camperAchievements.append(camperAchievement)
 
+########################################################################################################################
 class ReportAlphabeticalReport(webapp.RequestHandler):
     def post(self):
         session = Session.get(self.request.get('session'))
@@ -80,14 +82,26 @@ class AlphabeticalReportCamper:
     def addCamperAchievement(self, camperAchievement):
         self.camperAchievements.append(camperAchievement)
 
+########################################################################################################################
 class ReportGroupReport(webapp.RequestHandler):
     def post(self):
         session = Session.get(self.request.get('session'))
         camperAchievements = CamperAchievement.gql('where session = :1 order by cabin', session)
-        camperAchievements = sorted(camperAchievements, key=lambda camperAchievement:(camperAchievement.achievement.level, camperAchievement.group, periods.index(camperAchievement.period), camperAchievement.camper.firstName.upper(), camperAchievement.camper.lastName.upper()))
+        camperAchievements = sorted(camperAchievements, key=lambda camperAchievement:(
+                camperAchievement.achievement.level,
+                periods.index(camperAchievement.period),
+                camperAchievement.camper.firstName.upper(),
+                camperAchievement.camper.lastName.upper()))
+
         groupReportRoot = GroupReportRoot()
         for camperAchievement in camperAchievements:
             groupReportRoot.addCamperAchievement(camperAchievement)
+        for groupReportAchievement in groupReportRoot.achievements:
+            for i in xrange(max([len(period.camperAchievements) for period in groupReportAchievement.periods])):
+                groupReportAchievement.rows.append(
+                        [None if i >= len(period.camperAchievements) else period.camperAchievements[i]
+                                for period in groupReportAchievement.periods])
+
 
         template_values = {'groupReportRoot': groupReportRoot, 'periods':periods}
         path = os.path.join(os.path.dirname(__file__), '../html/report/group_report.html')
@@ -95,23 +109,24 @@ class ReportGroupReport(webapp.RequestHandler):
 
 class GroupReportRoot:
     def __init__(self):
-        self.groups = []
+        self.achievements = []
 
     def addCamperAchievement(self, camperAchievement):
-        if not self.groups or camperAchievement.group != self.groups[-1].group or camperAchievement.achievement.key() != self.groups[-1].achievement.key():
-            self.groups.append(GroupReportGroup(camperAchievement.group, camperAchievement.achievement))
-        self.groups[-1].addCamperAchievement(camperAchievement)
+        # If this camperAchievement has a differenet Achievemn than the last we need to start a new achievement
+        if not self.achievements or camperAchievement.achievement.level != self.achievements[-1].achievement.level:
+            self.achievements.append(GroupReportAchievement(camperAchievement.achievement))
+        self.achievements[-1].addCamperAchievement(camperAchievement)
             
-class GroupReportGroup:
-    def __init__(self, group, achievement):
-        self.group = group
+class GroupReportAchievement:
+    def __init__(self, achievement):
         self.achievement = achievement
         self.periods = []
+        self.rows = []
+        for period in periods:
+            self.periods.append(GroupReportPeriod(period))
 
     def addCamperAchievement(self, camperAchievement):
-        if not self.periods or camperAchievement.period != self.periods[-1].period:
-            self.periods.append(GroupReportPeriod(camperAchievement.period))
-        self.periods[-1].addCamperAchievement(camperAchievement)
+        self.periods[periods.index(camperAchievement.period)].addCamperAchievement(camperAchievement)
 
 class GroupReportPeriod:
     def __init__(self, period):
@@ -121,6 +136,7 @@ class GroupReportPeriod:
     def addCamperAchievement(self, camperAchievement):
         self.camperAchievements.append(camperAchievement)
 
+########################################################################################################################
 class ReportMedalReport(webapp.RequestHandler):
     def post(self):
         session = Session.get(self.request.get('session'))

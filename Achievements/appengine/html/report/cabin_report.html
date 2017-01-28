@@ -6,7 +6,7 @@
     <body>
         {% for cabin in cabinReportRoot.cabins %}
             <hr class="pagebreak"/>
-            <table border="1">
+            <table border="1" class="report">
                 <thead><tr>
                         <td>Cabin {{cabin.cabin}} - ({{cabin.campers|length}})</td>
                         {% for period in periods %}
@@ -17,8 +17,14 @@
                 {% for camper in cabin.campers %}
                 <tr>
                     <td>{{camper.camper.firstName}} {{camper.camper.lastName}}</td>
-                    {% for camperAchievement in camper.camperAchievements %}
-                        <td>{{camperAchievement.achievement.name}}-{{camperAchievement.group}}</td>
+                    {% for period in periods %}
+                        <td>
+                            {% for camperAchievement in camper.camperAchievements %}
+                                {% if  camperAchievement.period == period %}
+                                    {{camperAchievement.achievement.name}}
+                                {% endif %}
+                            {% endfor %}
+                        </td>
                     {% endfor %}
                 </tr>
                 {% endfor %}

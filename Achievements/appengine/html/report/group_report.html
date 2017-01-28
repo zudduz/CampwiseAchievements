@@ -4,21 +4,25 @@
         <title>Achievemnts Schedule By Achievement Group</title>
     </head>
     <body>
-        {% for group in groupReportRoot.groups %}
+        {% for achievement in groupReportRoot.achievements %}
             <hr class="pagebreak"/>
-            {{group.achievement.name}}-{{group.group}}
-            <table><tr>
-                {% for period in group.periods %}
-                    <td valign="top">
-                        <table border="1">
-                            <tr><td align="center">{{period.period}} ({{period.camperAchievements|length}})</td></tr>
-                            {% for camperAchievement in period.camperAchievements %}
-                                <tr><td>{{camperAchievement.camper.firstName}} {{camperAchievement.camper.lastName}}</td></tr>
-                            {%endfor%}
-                        </table>
-                    </td>
-                {%endfor%}
-            </tr></table>
+            {{achievement.achievement.name}}
+            <table border="1" class="report">
+                <thead><tr>
+                    {% for period in achievement.periods %}
+                        <td>{{period.period}} ({{period.camperAchievements|length}})</td>
+                    {% endfor %}
+                </tr></thead>
+                <tbody>
+                    {% for row in achievement.rows %}
+                        <tr>
+                            {% for camperAchievement in row %}
+                            <td>{{camperAchievement.camper.firstName}} {{camperAchievement.camper.lastName}}</td>
+                            {% endfor %}
+                        </tr>
+                    {%endfor%}
+                </tbody>
+            </table>
         {%endfor%}
     </body>
 </html>
