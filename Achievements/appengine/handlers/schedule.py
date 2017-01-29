@@ -2,6 +2,7 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 import os
 import logging
+import random
 
 from models.model import *
 import util
@@ -16,8 +17,8 @@ class ScheduleCabinUpdate(webapp.RequestHandler):
 
     def post(self):
         session = Session.get(self.request.get('session'))
-        for camperStrings in self.request.get('raw_csv').splitlines():
-            camperArr = camperStrings.split('|')
+        for camperLine in self.request.get('raw_csv').splitlines():
+            camperArr = camperLine.split('|')
             if len(camperArr) != 5:
                 self.response.out.write('error')
             campwiseId = int(camperArr[0])
@@ -52,7 +53,7 @@ class ScheduleClear(webapp.RequestHandler):
             camperAchievement.delete()
         self.redirect('/schedule_start')
 
-periods = ['SM', 'TW', 'RF']
+periods = ('SM', 'TW', 'RF')
 groups = ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H')
 class ScheduleReview(webapp.RequestHandler):
     def post(self):
@@ -63,15 +64,20 @@ class ScheduleReview(webapp.RequestHandler):
             self.redirect('/schedule_clear?session_key=' + str(session.key()))
             return
         classCampers = []
-        for camperStrings in self.request.get('raw_csv').splitlines():
-            camperArr = camperStrings.split('|')
+        camperLines = self.request.get('raw_csv').splitlines()
+        random.shuffle(camperLines)
+        for camperLine in camperLines:
+            camperArr = camperLine.split('|')
             if len(camperArr) != 5:
-                self.response.out.write('error')
+                raise ValueError('Imported line \'' + str(camperLine) + '\' doesn\'t contain 4 |\'s')
             campwiseId = int(camperArr[0])
             cabin = camperArr[4]
             if camperArr[4] == '':
                 cabin = None
             camper = Camper.gql('WHERE campwiseId = :1', campwiseId).get()
+            if not camper:
+                raise AssertionError('campwiseId ' + str(campwiseId) + ' not found in DB. Be sure to run Import before scheduling.')
+
             classCampers.append(ClassCamper(camper, session, cabin))
 
         classesByPeriodIndex = {}
