@@ -31,3 +31,12 @@ thead td {
 table.report td {
     width: 200px;
 }
+
+table td {
+    border: 2px solid #000000;
+}
+
+table {
+    border-collapse: collapse;
+    border: 2px solid #000000;
+}
