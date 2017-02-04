@@ -39,6 +39,7 @@ class IncomingCamper(HistoricalModel):
 
 class Achievement(HistoricalModel):
     name = db.StringProperty()
+    criteria = db.TextProperty()
     level = db.IntegerProperty()
     badge = db.ReferenceProperty(reference_class=Badge)
     size = db.IntegerProperty(default=10)

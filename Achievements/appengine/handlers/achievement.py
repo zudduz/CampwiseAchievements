@@ -7,7 +7,7 @@ from models.model import *
 #Achievement
 class AchievementList(webapp.RequestHandler):
     def get(self):
-        achievements = Achievement.all()
+        achievements = Achievement.gql("ORDER BY level")
         template_values = {
             'achievements': achievements,
             }
@@ -62,6 +62,7 @@ class AchievementEdit(webapp.RequestHandler):
                 validationErrors.extend(['Invalid Number Format for size'])
 
         achievement.badge = Badge.get(self.request.get('badge'))
+        achievement.criteria = self.request.get('criteria')
         incomingName = self.request.get('name')
         if incomingName != achievement.name and achievement.gql("WHERE name = :1", incomingName).get() is not None:
             validationErrors.extend(['Achievement already exists! (Achievement Name was found in database)'])
@@ -103,6 +104,7 @@ class AchievementNew(webapp.RequestHandler):
                 validationErrors.extend(['Invalid Number Format for size'])
 
         achievement.badge = Badge.get(self.request.get('badge'))
+        achievement.criteria = self.request.get('criteria')
         achievement.name = self.request.get('name')
         if achievement.name and achievement.gql("WHERE name = :1", achievement.name).get() is not None:
             validationErrors.extend(['Achievement already exists! (Achievement Name was found in database)'])

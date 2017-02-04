@@ -19,6 +19,7 @@ class MainPage(webapp2.RequestHandler):
 
 app = webapp2.WSGIApplication(
      [('/', handlers.root.MainPage),
+      ('/ben', handlers.root.BenPage),
       ('/import', handlers.camper_import.Import),
       ('/clear_imports', handlers.camper_import.ClearImports),
       ('/receive_import', handlers.camper_import.ReceiveImport),
@@ -33,6 +34,8 @@ app = webapp2.WSGIApplication(
       ('/report_group_report', handlers.report.ReportGroupReport),
       ('/report_medal_report', handlers.report.ReportMedalReport),
       ('/report_alphabetical_report', handlers.report.ReportAlphabeticalReport),
+      ('/report_criteria_report', handlers.report.ReportCriteriaReport),
+      ('/report_size_report', handlers.report.ReportSizeReport),
       ('/debug_null_ca', handlers.debug_report.DebugNullCA),
       ('/debug_null_ca_with_names', handlers.debug_report.DebugNullCAWithNames),
       ('/debug_null_ca_null_periods', handlers.debug_report.DebugNullCANullPeriods),

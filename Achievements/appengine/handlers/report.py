@@ -11,6 +11,9 @@ periods = ('SM', 'TW', 'RF')
 
 ########################################################################################################################
 class ReportCabinReport(webapp.RequestHandler):
+    def get(self):
+        self.post()
+
     def post(self):
         session = Session.get(self.request.get('session'))
         camperAchievements = CamperAchievement.gql('where session = :1 order by cabin', session)
@@ -52,6 +55,9 @@ class CabinReportCamper:
 
 ########################################################################################################################
 class ReportAlphabeticalReport(webapp.RequestHandler):
+    def get(self):
+        self.post()
+
     def post(self):
         session = Session.get(self.request.get('session'))
         camperAchievements = CamperAchievement.gql('where session = :1', session)
@@ -84,9 +90,12 @@ class AlphabeticalReportCamper:
 
 ########################################################################################################################
 class ReportGroupReport(webapp.RequestHandler):
+    def get(self):
+        self.post()
+
     def post(self):
         session = Session.get(self.request.get('session'))
-        camperAchievements = CamperAchievement.gql('where session = :1 order by cabin', session)
+        camperAchievements = CamperAchievement.gql('where session = :1', session)
         camperAchievements = sorted(camperAchievements, key=lambda camperAchievement:(
                 camperAchievement.achievement.level,
                 periods.index(camperAchievement.period),
@@ -112,7 +121,7 @@ class GroupReportRoot:
         self.achievements = []
 
     def addCamperAchievement(self, camperAchievement):
-        # If this camperAchievement has a differenet Achievemn than the last we need to start a new achievement
+        # If this camperAchievement has a differenet achievement than the last we need to start a new achievement
         if not self.achievements or camperAchievement.achievement.level != self.achievements[-1].achievement.level:
             self.achievements.append(GroupReportAchievement(camperAchievement.achievement))
         self.achievements[-1].addCamperAchievement(camperAchievement)
@@ -138,9 +147,12 @@ class GroupReportPeriod:
 
 ########################################################################################################################
 class ReportMedalReport(webapp.RequestHandler):
+    def get(self):
+        self.post()
+
     def post(self):
         session = Session.get(self.request.get('session'))
-        sessionCamperAchievements = CamperAchievement.gql('where session = :1 order by cabin', session)
+        sessionCamperAchievements = CamperAchievement.gql('where session = :1', session)
         camperListByCampwiseId = {}
         for camperAchievement in sessionCamperAchievements:
             if camperAchievement.camper.campwiseId not in camperListByCampwiseId:
@@ -188,3 +200,70 @@ class CamperBadge:
         self.camper = camper
         self.badge = badge
 
+########################################################################################################################
+class ReportSizeReport(webapp.RequestHandler):
+    def get(self):
+        self.post()
+
+    def post(self):
+        # Reuse criteria report classes and there generation
+        criteriaReportRoot = generateCriteriaReportRoot(self.request.get('session'))
+        template_values = {'criteriaReportRoot': criteriaReportRoot, 'periods':periods}
+        path = os.path.join(os.path.dirname(__file__), '../html/report/size_report.html')
+        self.response.out.write(template.render(path, template_values))
+        
+########################################################################################################################
+class ReportCriteriaReport(webapp.RequestHandler):
+    def get(self):
+        self.post()
+
+    def post(self):
+        criteriaReportRoot = generateCriteriaReportRoot(self.request.get('session'))
+        template_values = {'criteriaReportRoot': criteriaReportRoot, 'periods':periods}
+        path = os.path.join(os.path.dirname(__file__), '../html/report/criteria_report.html')
+        self.response.out.write(template.render(path, template_values))
+
+########################################################################################################################
+def generateCriteriaReportRoot(sessionParam):
+    session = Session.get(sessionParam)
+    camperAchievements = CamperAchievement.gql('where session = :1', session)
+    camperAchievements = sorted(camperAchievements, key=lambda camperAchievement:(
+            camperAchievement.achievement.level,
+            periods.index(camperAchievement.period),
+            camperAchievement.camper.firstName.upper(),
+            camperAchievement.camper.lastName.upper()))
+
+    criteriaReportRoot = CriteriaReportRoot()
+    for camperAchievement in camperAchievements:
+        criteriaReportRoot.addCamperAchievement(camperAchievement)
+    return criteriaReportRoot
+
+class CriteriaReportRoot:
+    def __init__(self):
+        self.achievements = []
+
+    def addCamperAchievement(self, camperAchievement):
+        # If this camperAchievement has a differenet achievement than the last we need to start a new achievement
+        if not self.achievements or camperAchievement.achievement.level != self.achievements[-1].achievement.level:
+            self.achievements.append(CriteriaReportAchievement(camperAchievement.achievement))
+        self.achievements[-1].addCamperAchievement(camperAchievement)
+            
+class CriteriaReportAchievement:
+    def __init__(self, achievement):
+        self.achievement = achievement
+        self.periods = []
+        self.criteriaLines = achievement.criteria.splitlines() if achievement.criteria else []
+
+
+    def addCamperAchievement(self, camperAchievement):
+        if not self.periods or camperAchievement.period != self.periods[-1].period:
+            self.periods.append(GroupReportPeriod(camperAchievement.period))
+        self.periods[-1].addCamperAchievement(camperAchievement)
+
+class CriteriaReportPeriod:
+    def __init__(self, period):
+        self.period = period
+        self.camperAchievements = []
+
+    def addCamperAchievement(self, camperAchievement):
+        self.camperAchievements.append(camperAchievement)
