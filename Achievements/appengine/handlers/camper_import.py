@@ -48,15 +48,6 @@ class FinalizeImport(webapp.RequestHandler):
             camper.lastName = incomingCamper.lastName
             camper.birthDate = incomingCamper.birthDate
             camper.put()
-            for achievementKey in self.request.get_all('camper' + str(incomingCamper.key())):
-                camperAchievement = CamperAchievement()
-                camperAchievement.camper = camper
-                camperAchievement.achievement = Achievement.get(achievementKey)
-                camperAchievement.session = None
-                camperAchievement.cabin = None
-                camperAchievement.period = None
-                camperAchievement.group = None
-                camperAchievement.put()
 
 
         #2 Delete all Incoming Campers
@@ -67,19 +58,45 @@ class FinalizeImport(webapp.RequestHandler):
 
 class ProcessImports(webapp.RequestHandler):
     def get(self):
-        incomingCampers = IncomingCamper.gql('WHERE existingCamper = NULL');
-        incomingCampers = sorted(incomingCampers, key=lambda incomingCamper:(incomingCamper.lastName.upper(), incomingCamper.firstName.upper()))
-        existingIncomingCampers = IncomingCamper.gql("WHERE existingCamper != NULL");
-        existingIncomingCampers = sorted(existingIncomingCampers, key=lambda incomingCamper:(incomingCamper.lastName.upper(), incomingCamper.firstName.upper()))
-        achievementsByBadge = {}
-        for badge in Badge.gql('order by level'):
-            achievementsByBadge[badge.name] = []
-        for achievement in Achievement.gql('order by level'):
-            achievementsByBadge[achievement.badge.name].append(achievement)
+        existingCampers = [];
+        renamedCampers = [];
+        newCampers = [];
+        duplicatedCampers = [];
+        incomingCampers = sorted(IncomingCamper.all(), key=lambda camper:(camper.lastName.upper(), camper.firstName.upper()))
+        for incomingCamper in incomingCampers:
+            if incomingCamper.existingCamper:
+                if (incomingCamper.firstName != incomingCamper.existingCamper.firstName or
+                         incomingCamper.lastName != incomingCamper.existingCamper.lastName or
+                         incomingCamper.birthDate != incomingCamper.existingCamper.birthDate):
+                    renamedCampers.append(incomingCamper);
+                else:
+                    existingCampers.append(incomingCamper);
+            else:
+                newCampers.append(incomingCamper)
+
+        campers = list(Camper.all())
+        for incomingCamper in incomingCampers:
+            dupes = []
+            for camper in campers:
+                if (incomingCamper.campwiseId != camper.campwiseId and (
+                        (incomingCamper.firstName.upper() == camper.firstName.upper() and incomingCamper.lastName.upper() == camper.lastName.upper()) or
+                        (incomingCamper.firstName.upper() == camper.firstName.upper() and incomingCamper.birthDate == camper.birthDate) or
+                        (incomingCamper.lastName.upper() == camper.lastName.upper() and incomingCamper.birthDate == camper.birthDate))):
+                    dupes.append(camper)
+            if len(dupes) > 0:
+                duplicatedCampers.append(DuplicatedCamper(incomingCamper, dupes))
+
         template_values = {
-            'incomingCampers': incomingCampers,
-            'existingIncomingCampers': existingIncomingCampers,
-            'achievementsByBadge': achievementsByBadge,
-            }
+            'newCampers': newCampers,
+            'renamedCampers': renamedCampers,
+            'existingCampers': existingCampers,
+            'duplicatedCampers': duplicatedCampers,
+        }
         path = os.path.join(os.path.dirname(__file__), '../html/import/process_imports.html')
         self.response.out.write(template.render(path, template_values))
+
+class DuplicatedCamper:
+    def __init__(self, incomingCamper, dupes):
+        self.incomingCamper = incomingCamper
+        self.dupes = dupes
+

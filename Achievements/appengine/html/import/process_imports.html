@@ -2,34 +2,146 @@
     <head>
         <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
         <title>Import Campers</title>
-        <script type="text/javascript">
-            {% for item in achievementsByBadge.items %}
-                function badge{{forloop.counter}}Check(camperNumber) {
-                    {% for achievement in item.1 %}
-                        document.getElementById('c'+camperNumber+'b{{forloop.parentloop.counter}}a{{forloop.counter}}').checked = true;
-                    {% endfor %}
-                }
-            {% endfor %}
-        </script>
     </head>
     <body>
-        <form action="/finalize_import" method="post">
-            {% for iCamper in incomingCampers %}
-                <b>{{ iCamper.firstName }} {{ iCamper.lastName }}</b> born on {{ iCamper.birthDate }} has not been found<br/>
-                {% for item in achievementsByBadge.items %}
-                <a href="javascript:badge{{forloop.counter}}Check({{forloop.parentloop.counter}})">{{ item.0 }}</a><br/>
-                    {% for achievement in item.1 %}
-                        <input type="checkbox" name="camper{{iCamper.key}}" value="{{achievement.key}}" id="c{{forloop.parentloop.parentloop.counter}}b{{forloop.parentloop.counter}}a{{forloop.counter}}">{{ achievement.name }}<br/>
-                    {% endfor %}
+        <h2>New:</h2>
+        The following campers look to be new:
+        <table>
+            <thead>
+                <tr>
+                    <td>Campwise Id</td>
+                    <td>First Name</td>
+                    <td>Last Name</td>
+                    <td>Birth Date</td>
+                    <td>Cabin</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for iCamper in newCampers %}
+                    <tr>
+                        <td>{{iCamper.campwiseId}}</td>
+                        <td>{{iCamper.firstName}}</td>
+                        <td>{{iCamper.lastName}}</td>
+                        <td>{{iCamper.birthDate}}</td>
+                        <td>{{iCamper.cabin}}</td>
+                    </tr>
                 {% endfor %}
-            {% endfor %}<br/>
-         
-            <hr/>
-            {% for iCamper in existingIncomingCampers %}
-                {{ iCamper.firstName }} {{ iCamper.lastName }} in cabin {{iCamper.cabin}} born on {{ iCamper.birthDate }} has been found<br/>
-            {% endfor %}
-
-            <input type="submit" value="Import Data">
+            </tbody>
+        </table>
+        <br/><br/>
+        <h2>Matched:</h2>
+        The following campers look to have successful matches:
+        <table>
+            <thead>
+                <tr>
+                    <td>Campwise Id</td>
+                    <td>First Name</td>
+                    <td>Last Name</td>
+                    <td>Birth Date</td>
+                    <td>Cabin</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for iCamper in existingCampers %}
+                    <tr>
+                        <td>{{iCamper.campwiseId}}</td>
+                        <td>{{iCamper.firstName}}</td>
+                        <td>{{iCamper.lastName}}</td>
+                        <td>{{iCamper.birthDate}}</td>
+                        <td>{{iCamper.cabin}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br/><br/>
+        <h2>Renames:</h2>
+        The following campers have conflicting attributes. Their incoming info doesn't match what's in the database.<br/>
+        They may have had a legitimate change such as name change due to adoption or a corrected typo.<br/>
+        Or a parent may be attempting to switch the camper that an account has been set up for.<br/>
+        <table>
+            <thead>
+                <tr>
+                    <td>Status</td>
+                    <td>Campwise Id</td>
+                    <td>First Name</td>
+                    <td>Last Name</td>
+                    <td>Birth Date</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for iCamper in renamedCampers %}
+                    <tr>
+                        <td>New</td>
+                        <td>{{iCamper.campwiseId}}</td>
+                        <td>{{iCamper.firstName}}</td>
+                        <td>{{iCamper.lastName}}</td>
+                        <td>{{iCamper.birthDate}}</td>
+                    </tr>
+                    <tr>
+                        <td><a href="/camper_edit?key={{iCamper.existingCamper.key}}">Existing</a></td>
+                        <td>{{iCamper.existingCamper.campwiseId}}</td>
+                        <td>{{iCamper.existingCamper.firstName}}</td>
+                        <td>{{iCamper.existingCamper.lastName}}</td>
+                        <td>{{iCamper.existingCamper.birthDate}}</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+     
+        <br/><br/>
+        <h2>Duplicates:</h2>
+        The following campers appear to be duplicates of another account we already have.<br/>
+        It could be a legitimate appearance of a duplicate.  Such as a twin with the same last name and birthdate.<br/>
+        Or a parent may have been locked out of their old account and be trying to establish a new account.<br/>
+        <table>
+            <thead>
+                <tr>
+                    <td>Status</td>
+                    <td>Campwise Id</td>
+                    <td>First Name</td>
+                    <td>Last Name</td>
+                    <td>Birth Date</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for duplicatedCamper in duplicatedCampers %}
+                    <tr>
+                        <td>New</td>
+                        <td>{{duplicatedCamper.incomingCamper.campwiseId}}</td>
+                        <td>{{duplicatedCamper.incomingCamper.firstName}}</td>
+                        <td>{{duplicatedCamper.incomingCamper.lastName}}</td>
+                        <td>{{duplicatedCamper.incomingCamper.birthDate}}</td>
+                    </tr>
+                    {% for dupe in duplicatedCamper.dupes %}
+                    <tr>
+                        <td><a href="/camper_edit?key={{dupe.key}}">Existing</a></td>
+                        <td>{{dupe.campwiseId}}</td>
+                        <td>{{dupe.firstName}}</td>
+                        <td>{{dupe.lastName}}</td>
+                        <td>{{dupe.birthDate}}</td>
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+     
+        <form action="/finalize_import" method="post">
+            <br/>All renames and duplicates are fixed or not needing to be fixed?<br/>
+            <input type="submit" value="Create new campers">
         </form>
     </body>
 </html>

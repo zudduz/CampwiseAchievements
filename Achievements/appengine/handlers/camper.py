@@ -62,6 +62,12 @@ class CamperEdit(webapp.RequestHandler):
             camper.birthDate = util.string2Date(self.request.get('birthDate'))
         except:
             validationErrors.extend(['Invalid Date Format for Birthday'])
+                
+        if self.request.get('campwiseId') not in (None, ''):
+            try:
+                camper.campwiseId = int(self.request.get('campwiseId'))
+            except:
+                validationErrors.extend(['Invalid Number Format for Campwise Id'])
 
         if validationErrors:
             path = os.path.join(os.path.dirname(__file__), '../html/camper/camper_edit.html')

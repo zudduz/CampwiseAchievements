@@ -8,9 +8,9 @@
        <div class="validationError">{{ validationError }}</div>
        {% endfor %}
        {% if validationErrors %}
-       <div>Click the back button to get to get back what you typed<div>
+       <div>Click the back button to get back what you typed<div>
        {% endif %}
-       Campwise Id: {{camper.campwiseId}}<br/>
+       Campwise Id:<input type="text" name="campwiseId" value="{{camper.campwiseId}}"><br/>
        First Name:<input type="text" name="firstName" value="{{camper.firstName}}"><br/>
        Last Name:<input type="text" name="lastName" value="{{camper.lastName}}"><br/>
        Birth Date:<input type="text" name="birthDate" value="{{birthDateString}}">(MM/DD/YYYY)<br/>

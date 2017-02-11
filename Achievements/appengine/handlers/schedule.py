@@ -10,7 +10,7 @@ import util
 
 class ScheduleCabinUpdate(webapp.RequestHandler):
     def get(self):
-        sessions = Session.gql('order by startDate')
+        sessions = Session.gql('ORDER BY startDate DESC')
         template_values = {'sessions': sessions}
         path = os.path.join(os.path.dirname(__file__), '../html/schedule/schedule_cabin_update.html')
         self.response.out.write(template.render(path, template_values))
@@ -34,7 +34,7 @@ class ScheduleCabinUpdate(webapp.RequestHandler):
 
 class ScheduleStart(webapp.RequestHandler):
     def get(self):
-        sessions = Session.gql('order by startDate')
+        sessions = Session.gql('ORDER BY startDate DESC')
         template_values = {'sessions': sessions}
         path = os.path.join(os.path.dirname(__file__), '../html/schedule/schedule_start.html')
         self.response.out.write(template.render(path, template_values))
