@@ -119,9 +119,18 @@
                         <td>{{duplicatedCamper.incomingCamper.lastName}}</td>
                         <td>{{duplicatedCamper.incomingCamper.birthDate}}</td>
                     </tr>
+                    {% if duplicatedCamper.incomingCamper.existingCamper %}
+                    <tr>
+                        <td>Existing</td>
+                        <td>{{duplicatedCamper.incomingCamper.existingCamper.campwiseId}}</td>
+                        <td>{{duplicatedCamper.incomingCamper.existingCamper.firstName}}</td>
+                        <td>{{duplicatedCamper.incomingCamper.existingCamper.lastName}}</td>
+                        <td>{{duplicatedCamper.incomingCamper.existingCamper.birthDate}}</td>
+                    </tr>
+                    {% endif %}
                     {% for dupe in duplicatedCamper.dupes %}
                     <tr>
-                        <td><a href="/camper_edit?key={{dupe.key}}">Existing</a></td>
+                        <td><a href="/camper_edit?key={{dupe.key}}">Duplicate</a></td>
                         <td>{{dupe.campwiseId}}</td>
                         <td>{{dupe.firstName}}</td>
                         <td>{{dupe.lastName}}</td>
@@ -140,7 +149,9 @@
         </table>
      
         <form action="/finalize_import" method="post">
-            <br/>All renames and duplicates are fixed or not needing to be fixed?<br/>
+            <br/><a href="/camper_list" target="_ALL">Make fixes to the camper list</a><br/>
+            Click the refresh button to see your changes reflected in this report.<br/>
+            All renames and duplicates are fixed or not needing to be fixed?<br/>
             <input type="submit" value="Create new campers">
         </form>
     </body>
