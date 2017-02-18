@@ -1,0 +1,34 @@
+<html>
+    <head>
+        <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+        <title>Achievemnts Schedule By Achievement Group</title>
+    </head>
+    <body>
+        {% for achievement in criteriaReportRoot.achievements %}
+            {% for period in achievement.periods %}
+                <hr class="pagebreak"/>
+                {{achievement.achievement.name}} - {{period.period}}
+                <table class="report criteria">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            {% for criteria in achievement.criteriaLines %}
+                            <th class="verticalTableHeader"><p>{{criteria}}</p></th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for camperAchievement in period.camperAchievements %}
+                            <tr>
+                                <td class="name">{{camperAchievement.camper.firstName}} {{camperAchievement.camper.lastName}}</td>
+                                {% for criteria in achievement.criteriaLines %}
+                                <td></td>
+                                {% endfor %}
+                            </tr>
+                        {%endfor%}
+                    </tbody>
+                </table>
+            {% endfor %}
+        {%endfor%}
+    </body>
+</html>

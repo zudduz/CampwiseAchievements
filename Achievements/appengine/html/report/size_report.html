@@ -1,0 +1,34 @@
+<html>
+    <head>
+        <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+        <title>Achievemnts Schedule By Achievement Group</title>
+    </head>
+    <body>
+        <table class="report">
+            <thead>
+                <tr>
+                    <td>Achievement</td>
+                    {% for period in periods %}
+                        <td style="width:50px;">{{period}}</td>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for achievement in criteriaReportRoot.achievements %}
+                    <tr>
+                        <td>{{achievement.achievement.level}} {{achievement.achievement.name}}</td>
+                        {% for periodString in periods %}
+                            <td style="width:50px; text-align:center">
+                                {% for period in achievement.periods %}
+                                    {% if  period.period == periodString %}
+                                        {{period.camperAchievements|length}}
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+    </body>
+</html>

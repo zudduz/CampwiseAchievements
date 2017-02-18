@@ -1,0 +1,38 @@
+<html>
+  <head>
+    <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+  </head>
+  <body>
+  <a href="/session_list">Session List</a><br/>
+  <a href="/achievement_list">Achievement List</a><br/>
+  <a href="/badge_list">Badge List</a><br/>
+
+  <hr/>
+  <h3>Debug Reports</h3>
+  <form action="/debug_null_ca" method="post">
+      <select name="session">
+          {% for session in sessions %}
+              <option value="{{session.key}}">{{session.name}}</option>
+          {% endfor %}
+      </select>
+      <input type="submit" value="Run Debug Null CamperAchievements"/>
+  </form>
+  <form action="/debug_null_ca_with_names" method="post">
+      <select name="session">
+          {% for session in sessions %}
+              <option value="{{session.key}}">{{session.name}}</option>
+          {% endfor %}
+      </select>
+      <input type="submit" value="Run Debug Null CamperAchievements With Names"/>
+  </form>
+  <form action="/debug_null_ca_null_periods" method="post">
+      <select name="session">
+          {% for session in sessions %}
+              <option value="{{session.key}}">{{session.name}}</option>
+          {% endfor %}
+      </select>
+      <input type="submit" value="Run Debug Null CamperAchievements Null Periods"/>
+  </form>
+  </body>
+</html>
+
