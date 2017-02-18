@@ -216,7 +216,8 @@ class ClassCamper:
         for camperAchievement in CamperAchievement.gql('where passed = True and camper = :1', camper):
             self.completedAchievementLevels.append(camperAchievement.achievement.level)
         for badgeLevel in ClassCamper.achievementsByBadgeLevel.keys():
-            self.achievementsNeededByBadgeLevel[badgeLevel] = filter(lambda item: item.level not in self.completedAchievementLevels, ClassCamper.achievementsByBadgeLevel[badgeLevel])
+            self.achievementsNeededByBadgeLevel[badgeLevel] = filter(
+                    lambda item: item.level not in self.completedAchievementLevels, ClassCamper.achievementsByBadgeLevel[badgeLevel])
 
     def periodScheduled(self, periodIndex):
         return periodIndex in self.scheduledClasses
@@ -226,7 +227,8 @@ class ClassCamper:
 
     def addClass(self, classInstance):
         self.scheduledClasses[classInstance.periodIndex] = classInstance
-        self.achievementsNeededByBadgeLevel[classInstance.achievement.badge.level] = filter(lambda item: item.level != classInstance.achievement.level, self.achievementsNeededByBadgeLevel[classInstance.achievement.badge.level])
+        self.achievementsNeededByBadgeLevel[classInstance.achievement.badge.level] = filter(
+                lambda item: item.level != classInstance.achievement.level, self.achievementsNeededByBadgeLevel[classInstance.achievement.badge.level])
 
     def neededForBadge(self):
         for level in sorted(self.achievementsNeededByBadgeLevel.keys()):

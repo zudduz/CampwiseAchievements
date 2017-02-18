@@ -2,6 +2,7 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 import os
 import logging
+import json
 
 from models.model import *
 import util
@@ -61,7 +62,11 @@ class ReportAlphabeticalReport(webapp.RequestHandler):
     def post(self):
         session = Session.get(self.request.get('session'))
         camperAchievements = CamperAchievement.gql('where session = :1', session)
-        camperAchievements = sorted(camperAchievements, key=lambda camperAchievement:(camperAchievement.camper.lastName.upper(), camperAchievement.camper.firstName.upper(), periods.index(camperAchievement.period)))
+        camperAchievements = sorted(camperAchievements,
+                key=lambda camperAchievement:(
+                        camperAchievement.camper.lastName.upper(),
+                        camperAchievement.camper.firstName.upper(),
+                        periods.index(camperAchievement.period)))
         alphabeticalReportRoot = AlphabeticalReportRoot()
         for camperAchievement in camperAchievements:
             alphabeticalReportRoot.addCamperAchievement(camperAchievement)
@@ -84,6 +89,54 @@ class AlphabeticalReportCamper:
     def __init__(self, camper):
         self.camper = camper
         self.camperAchievements = []
+
+    def addCamperAchievement(self, camperAchievement):
+        self.camperAchievements.append(camperAchievement)
+
+########################################################################################################################
+class ReportScheduleAdjust(webapp.RequestHandler):
+    def get(self):
+        path = os.path.join(os.path.dirname(__file__), '../html/report/schedule_adjust.html')
+        template_values = {}
+        self.response.out.write(template.render(path, template_values))
+
+class ReportScheduleAdjustJson(webapp.RequestHandler):
+    def get(self):
+        self.post()
+
+    def post(self):
+        session = Session.get(self.request.get('session'))
+        camperAchievements = CamperAchievement.gql('where session = :1', session)
+        camperAchievements = sorted(camperAchievements,
+                key=lambda camperAchievement:(
+                        camperAchievement.camper.lastName.upper(),
+                        camperAchievement.camper.firstName.upper(),
+                        periods.index(camperAchievement.period)))
+        alphabeticalReportRoot = SchedulAdjustRoot()
+        for camperAchievement in camperAchievements:
+            alphabeticalReportRoot.addCamperAchievement(camperAchievement)
+
+        template_values = {'alphabeticalReportRoot': alphabeticalReportRoot, 'periods':periods}
+        self.response.headers['Content-Type'] = 'application/json'   
+        self.response.out.write(json.dumps(template_values))
+
+class SchedulAdjustRoot:
+    def __init__(self):
+        self.campers = []
+
+    def addCamperAchievement(self, camperAchievement):
+        #if self.campers is empty or the last camper is not the same as the current camper.  incoming campers should be in order of camper
+        if not self.campers or camperAchievement.camper.key() != self.campers[-1].camper.key():
+            self.campers.append(SchedulAdjustCamper(camperAchievement.camper))
+        self.campers[-1].addCamperAchievement(camperAchievement)
+
+class SchedulAdjustCamper:
+    def __init__(self, camper):
+        self.camper = camper
+        self.camperAchievements = []
+        self.completedAchievements = []
+        for camperAchievement in CamperAchievement.gql('where passed = True and camper = :1', camper):
+            self.completedAchievements.append(camperAchievement.achievement)
 
     def addCamperAchievement(self, camperAchievement):
         self.camperAchievements.append(camperAchievement)
