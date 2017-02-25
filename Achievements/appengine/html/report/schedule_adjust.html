@@ -4,36 +4,11 @@
         <title>Achievemnts Schedule By Achievement Group</title>
         <script src="/js/jquery-3.1.1.min.js"></script>
         <script src="/js/camper-achievement.js"></script>
-        <script>
-            ca.scheduleAdjust.init();
-        </script>
     </head>
     <body>
-        <table class="report">
-            <thead>
-                <tr>
-                    <td>Achievement</td>
-                    {% for period in periods %}
-                        <td style="width:50px;">{{period}}</td>
-                    {% endfor %}
-                </tr>
-            </thead>
-            <tbody>
-                {% for achievement in criteriaReportRoot.achievements %}
-                    <tr>
-                        <td>{{achievement.achievement.level}} {{achievement.achievement.name}}</td>
-                        {% for periodString in periods %}
-                            <td style="width:50px; text-align:center">
-                                {% for period in achievement.periods %}
-                                    {% if  period.period == periodString %}
-                                        {{period.camperAchievements|length}}
-                                    {% endif %}
-                                {% endfor %}
-                            </td>
-                        {% endfor %}
-                    </tr>
-                {%endfor%}
-            </tbody>
-        </table>
+        <div id="content"></div>
     </body>
+    <script>
+        ca.scheduleAdjust.init();
+    </script>
 </html>

@@ -18,7 +18,11 @@ class ReportCabinReport(webapp.RequestHandler):
     def post(self):
         session = Session.get(self.request.get('session'))
         camperAchievements = CamperAchievement.gql('where session = :1 order by cabin', session)
-        camperAchievements = sorted(camperAchievements, key=lambda camperAchievement:(camperAchievement.cabin, camperAchievement.camper.firstName.upper(), camperAchievement.camper.lastName.upper(), periods.index(camperAchievement.period)))
+        camperAchievements = sorted(camperAchievements, key=lambda camperAchievement:(
+                camperAchievement.cabin, 
+                camperAchievement.camper.firstName.upper(),
+                camperAchievement.camper.lastName.upper(),
+                periods.index(camperAchievement.period)))
         cabinReportRoot = CabinReportRoot()
         for camperAchievement in camperAchievements:
             cabinReportRoot.addCamperAchievement(camperAchievement)
@@ -112,34 +116,50 @@ class ReportScheduleAdjustJson(webapp.RequestHandler):
                         camperAchievement.camper.lastName.upper(),
                         camperAchievement.camper.firstName.upper(),
                         periods.index(camperAchievement.period)))
-        alphabeticalReportRoot = SchedulAdjustRoot()
+        scheduleAdjustRoot = ScheduleAdjustRoot()
         for camperAchievement in camperAchievements:
-            alphabeticalReportRoot.addCamperAchievement(camperAchievement)
+            scheduleAdjustRoot.addCamperAchievement(camperAchievement)
 
-        template_values = {'alphabeticalReportRoot': alphabeticalReportRoot, 'periods':periods}
+        template_values = {
+                #'sessionList': [s.toJson() for s in Session.all()],
+                'session': session.toJson(),
+                #'camperAchievements': [ca.toJson() for ca in camperAchievements],
+                'scheduleCampers': [c.toJson() for c in scheduleAdjustRoot.campers],
+                'badges': [b.toJson() for b in Badge.all()],
+                'achievements': [a.toJson() for a in Achievement.all()],
+                'periods':periods
+        }
         self.response.headers['Content-Type'] = 'application/json'   
         self.response.out.write(json.dumps(template_values))
 
-class SchedulAdjustRoot:
+class ScheduleAdjustRoot:
     def __init__(self):
         self.campers = []
 
     def addCamperAchievement(self, camperAchievement):
-        #if self.campers is empty or the last camper is not the same as the current camper.  incoming campers should be in order of camper
+        # if self.campers is empty or the last camper is not the same as the current camper.
+        # incoming campers should be in order of camper
         if not self.campers or camperAchievement.camper.key() != self.campers[-1].camper.key():
-            self.campers.append(SchedulAdjustCamper(camperAchievement.camper))
+            self.campers.append(ScheduleAdjustCamper(camperAchievement.camper))
         self.campers[-1].addCamperAchievement(camperAchievement)
 
-class SchedulAdjustCamper:
+class ScheduleAdjustCamper:
     def __init__(self, camper):
         self.camper = camper
         self.camperAchievements = []
-        self.completedAchievements = []
-        for camperAchievement in CamperAchievement.gql('where passed = True and camper = :1', camper):
-            self.completedAchievements.append(camperAchievement.achievement)
+        #self.completedAchievements = []
+        #for camperAchievement in CamperAchievement.gql('where passed = True and camper = :1', camper):
+            #self.completedAchievements.append(camperAchievement.achievement)
 
     def addCamperAchievement(self, camperAchievement):
         self.camperAchievements.append(camperAchievement)
+
+    def toJson(self):
+        return {
+                'camper': self.camper.toJson(),
+                #'completedAchievements': [a.toJson() for a in self.completedAchievements],
+                'camperAchievements': [ca.toJson() for ca in self.camperAchievements],
+        }
 
 ########################################################################################################################
 class ReportGroupReport(webapp.RequestHandler):
