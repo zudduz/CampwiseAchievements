@@ -1,11 +1,15 @@
 <html>
     <head>
         <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
-        <title>Achievemnts Schedule By Achievement Group</title>
+        <title>Adjust Achievement Schedule for {{session.name}}</title>
         <script src="/js/jquery-3.1.1.min.js"></script>
         <script src="/js/camper-achievement.js"></script>
     </head>
     <body>
+        <h2>{{session.name}}</h2>
+        <a href="#" onclick="ca.scheduleAdjust.writeAlphabetical()">Alpha</a>&nbsp;
+        <a href="#" onclick="ca.scheduleAdjust.writeGroup()">Group</a>
+        <br/><br/>
         <div id="content"></div>
     </body>
     <script>

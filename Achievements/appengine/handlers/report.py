@@ -100,9 +100,23 @@ class AlphabeticalReportCamper:
 ########################################################################################################################
 class ReportScheduleAdjust(webapp.RequestHandler):
     def get(self):
+        session = Session.get(self.request.get('session'))
         path = os.path.join(os.path.dirname(__file__), '../html/report/schedule_adjust.html')
-        template_values = {}
+        template_values = {'session': session}
         self.response.out.write(template.render(path, template_values))
+
+class ReportScheduleAdjustCompletedAchievements(webapp.RequestHandler):
+    def get(self):
+        self.post()
+
+    def post(self):
+        camper = Camper.get(self.request.get('camper'))
+        camperAchievements = CamperAchievement.gql('where camper = :1', camper)
+        template_values = {
+                'camperAchievements': [ca.toJson() for ca in camperAchievements],
+        }
+        self.response.headers['Content-Type'] = 'application/json'   
+        self.response.out.write(json.dumps(template_values))
 
 class ReportScheduleAdjustJson(webapp.RequestHandler):
     def get(self):
