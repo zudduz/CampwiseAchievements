@@ -91,7 +91,7 @@ class CamperAchievement(HistoricalModel):
                 'key': str(self.key()),
                 'camperKey': str(self.camper.key()),
                 'achievementKey': str(self.achievement.key()),
-                'sessionKey': str(self.session.key()),
+                'sessionKey': str(self.session.key()) if self.session else None,
                 'period': self.period,
                 'passed': self.passed,
                 'cabin': self.cabin,

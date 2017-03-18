@@ -38,6 +38,7 @@ app = webapp2.WSGIApplication(
       ('/report_size_report', handlers.report.ReportSizeReport),
       ('/report_schedule_adjust', handlers.report.ReportScheduleAdjust),
       ('/report_schedule_adjust_json', handlers.report.ReportScheduleAdjustJson),
+      ('/report_schedule_adjust_check', handlers.report.ReportScheduleAdjustCheck),
       ('/report_schedule_adjust_completed_achievements',
           handlers.report.ReportScheduleAdjustCompletedAchievements),
       ('/debug_null_ca', handlers.debug_report.DebugNullCA),

@@ -110,10 +110,56 @@ class ReportScheduleAdjustCompletedAchievements(webapp.RequestHandler):
         self.post()
 
     def post(self):
-        camper = Camper.get(self.request.get('camper'))
-        camperAchievements = CamperAchievement.gql('where camper = :1', camper)
+        camperKeys = self.request.get_all('camperKeys[]')
+        completedAchievements = []
+        for camperKey in camperKeys:
+            completedAchievements.extend(CamperAchievement.gql('where camper = KEY(:1)', camperKey))
         template_values = {
-                'camperAchievements': [ca.toJson() for ca in camperAchievements],
+                'completedAchievements': [ca.toJson() for ca in completedAchievements],
+        }
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(json.dumps(template_values))
+
+class ReportScheduleAdjustCheck(webapp.RequestHandler):
+    def get(self):
+        self.post()
+
+    def post(self):
+        camperKey = self.request.get('camperKey')
+        achievementKey = self.request.get('achievementKey')
+        sessionKey = self.request.get('sessionKey')
+        period = self.request.get('period')
+        cabin = self.request.get('cabin')
+        scheduled = self.request.get('scheduled').lower() == 'true'
+
+        deleteList = CamperAchievement.gql('where camper = KEY(:1) and session = KEY(:2) and period = :3', camperKey, sessionKey, period)
+
+        foundCaToDelete = False
+        caToDelete = None
+        for deleteCa in deleteList:
+            if foundCaToDelete:
+                raise AssertionError('Too many achievements in a period for camper ' + camperKey);
+            caToDelete = deleteCa
+            foundCaToDelete = True
+
+        if foundCaToDelete:
+            caToDelete.delete()
+
+        camperAchievement = None
+        if not scheduled:
+            camperAchievement = CamperAchievement()
+            camperAchievement.camper = Camper.get(self.request.get('camperKey'))
+            camperAchievement.achievement = Achievement.get(self.request.get('achievementKey'))
+            camperAchievement.session = Session.get(self.request.get('sessionKey'))
+            camperAchievement.period = self.request.get('period')
+            camperAchievement.group = 'A'
+            camperAchievement.cabin = self.request.get('cabin')
+            camperAchievement.passed = True
+            camperAchievement.put()
+
+        template_values = {
+            'camperAchievement': camperAchievement.toJson() if camperAchievement else None,
+            'deletedCa': caToDelete.toJson() if caToDelete else None,
         }
         self.response.headers['Content-Type'] = 'application/json'   
         self.response.out.write(json.dumps(template_values))
@@ -124,6 +170,7 @@ class ReportScheduleAdjustJson(webapp.RequestHandler):
 
     def post(self):
         session = Session.get(self.request.get('session'))
+        achievements = Achievement.gql('ORDER BY level')
         camperAchievements = CamperAchievement.gql('where session = :1', session)
         camperAchievements = sorted(camperAchievements,
                 key=lambda camperAchievement:(
@@ -140,7 +187,7 @@ class ReportScheduleAdjustJson(webapp.RequestHandler):
                 #'camperAchievements': [ca.toJson() for ca in camperAchievements],
                 'scheduleCampers': [c.toJson() for c in scheduleAdjustRoot.campers],
                 'badges': [b.toJson() for b in Badge.all()],
-                'achievements': [a.toJson() for a in Achievement.all()],
+                'achievements': [a.toJson() for a in achievements],
                 'periods':periods
         }
         self.response.headers['Content-Type'] = 'application/json'   
@@ -172,7 +219,7 @@ class ScheduleAdjustCamper:
         return {
                 'camper': self.camper.toJson(),
                 #'completedAchievements': [a.toJson() for a in self.completedAchievements],
-                'camperAchievements': [ca.toJson() for ca in self.camperAchievements],
+                'sessionAchievements': [ca.toJson() for ca in self.camperAchievements],
         }
 
 ########################################################################################################################

@@ -19,6 +19,18 @@ tr:nth-child(odd) {
     background-color: #FFFFCC;
 }
 
+tr.needed {
+    background-color: #FFFFCC;
+}
+
+tr.completed {
+    background-color: #99DD99;
+}
+
+td.scheduled {
+    text-align:center;
+}
+
 thead tr:nth-child(1n+0) {
     font-weight: bold;
     background-color: inherit;
