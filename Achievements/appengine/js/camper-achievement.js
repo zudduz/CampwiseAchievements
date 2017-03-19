@@ -68,13 +68,9 @@ ca.sa.completedLoaded = function(data) {
 ca.sa.writeAlphabetical = function() {
     let data = ca.sa.data;
     $('#content').html(`
+            ${data.scheduleCampers.length} campers
             <table>
-                <thead><tr>
-                    <td>Camper Name</td>
-                    <td>SM</td>
-                    <td>TW</td>
-                    <td>RF</td>
-                </tr></thead>
+                <thead><tr><td>Camper Name</td>${ca.sa.periodsHeader()}</tr></thead>
                 <tbody id="camperRows"></tbody>
             </table>`);
     data.scheduleCampers.forEach((sc, i) => {
@@ -100,15 +96,26 @@ ca.sa.writeGroup = function() {
     }));
     
     $('#content').html('');
+    $('#content').append(`
+            <b>Totals</b>
+            <table>
+                <thead><tr><td>Name</td>${ca.sa.periodsHeader()}</tr></thead>
+                <tbody id="achievementTotals"></tbody>
+            </table><br/><br/>`);
     data.achievements.forEach((a, i) => {
+        let periodsHtml = `<td>${a.name}</td>`;
+        data.periods.forEach((p, j) => periodsHtml += `<td>${a.periods[j].length}</td>`);
+        $('#achievementTotals').append(`<tr>${periodsHtml}</tr>`);
+    });
+    data.achievements.forEach((a, i) => {
+        let headerPeriodsHtml = '';
+        data.periods.forEach((p, j) => {
+            headerPeriodsHtml += `<td>${p} (${a.periods[j].length})</td>`;
+        });
         $('#content').append(`
                 <b>${a.name}</b>
                 <table>
-                    <thead><tr>
-                        <td>SM</td>
-                        <td>TW</td>
-                        <td>RF</td>
-                    </tr></thead>
+                    <thead><tr>${headerPeriodsHtml}</tr></thead>
                     <tbody id="camperRows${i}"></tbody>
                 </table><br/><br/>`);
         let j = 0;
@@ -140,11 +147,7 @@ ca.sa.showCamper = function(sc) {
     $('#content').html(`
             <h3>${sc.camper.lastName}, ${sc.camper.firstName} (${sc.camper.cabin})</h3>
             <table>
-                <thead><tr>
-                    <td>SM</td>
-                    <td>TW</td>
-                    <td>RF</td>
-                    <td>Name</td>
+                <thead><tr>${ca.sa.periodsHeader()}<td>Name</td>
                 </tr></thead>
                 <tbody id="achievementRows"></tbody>
             </table>`);
@@ -199,4 +202,9 @@ ca.sa.showCamper = function(sc) {
 
 ca.sa.periodIndex = function(period) {
     return ca.sa.data.periods.findIndex((p) => p == period);
+}
+ca.sa.periodsHeader = function() {
+    let periodsHeader = '';
+    ca.sa.data.periods.forEach(p => periodsHeader += `<td>${p}</td>`);
+    return periodsHeader;
 }
