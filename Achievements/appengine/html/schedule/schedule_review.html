@@ -7,7 +7,7 @@
         <form action="/schedule_finalize" method="post">
             Session: {{session.name}}<br/>
             <input type="hidden" name="session" value="{{session.key}}"/>
-                <table border="1">
+                <table style="display:none;" border="1">
                     <thead><tr>
                         <td>Period</td><td>Achievement Name</td><td>Level</td><td>Group</td><td>Size</td>
                     </tr></thead>
@@ -23,7 +23,7 @@
                         {% endfor %}
                     </tbody>
                 </table>
-                <table border="1">
+                <table style="display:none;" border="1">
                     <thead><tr>
                         <td>Name</td><td>Cabin</td><td>Period</td><td>Achievement</td><td>Group</td>
                     </tr></thead>
@@ -70,6 +70,22 @@
                         {% endfor %}
                     </tbody>
                 </table>
+                <br/>
+                The following campers have completed all achievement and will not appear in the shedule.
+                <table border="1">
+                    <thead><tr>
+                        <td>Name</td><td>Birthdate</td>
+                    </tr></thead>
+                    <tbody>
+                        {% for classCamper in classCampers %}
+                            {% if classCamper.completedAchievementLevels|length == achievements|length %}
+                                <tr><td>{{classCamper.camper.lastName}}, {{classCamper.camper.firstName}}</td><td>{{classCamper.camper.birthDate}}</td></tr>
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <br/><br/>
+                Press "Finalize Schedule" to create the schedule. Then go to schedule adjust page to manipulate it.<br/>
             <input type="submit" value="Finalize Schedule">
         </form>
     </body>

@@ -6,7 +6,7 @@ ca.sa.init = function() {
     $('#content').text('Loading...');
     $.getJSON('/report_schedule_adjust_json' + window.location.search)
             .done(ca.sa.campersLoaded)
-            .fail(() => window.alert('Camper Load failed'));
+            .fail(() => ca.sa.showMessage('Camper Load failed'));
 };
 
 ca.sa.campersLoaded = function(data) {
@@ -39,16 +39,32 @@ ca.sa.campersLoaded = function(data) {
 
     ca.sa.writeAlphabetical();
 
+    ca.sa.showMessage('Loading Completed Achievements');
+    let loaded = [];
     let pageSize = 50;
-    for (let i = 0; i < camperKeys.length; i += pageSize) {
+    for (let i = 0; (i * pageSize) < camperKeys.length; i++) {
+        loaded[i] = false;
         $.ajax({
             dataType: 'json',
             method: 'POST',
             url: '/report_schedule_adjust_completed_achievements',
-            data: {camperKeys: camperKeys.slice(i, i + pageSize)}})
-                .done(ca.sa.completedLoaded)
-                .fail(() => window.alert(`Completed Achievement Load page ${i} failed`));
+            data: {camperKeys: camperKeys.slice(i * pageSize, (i + 1) * pageSize)}
+        }).done(data => {
+            data.completedAchievements.forEach(compA => {
+                if (compA.sessionKey != ca.sa.data.session.key) {
+                    ca.sa.data.campers[compA.camperKey].completedAchievements.push(compA);
+                }
+            });
+            loaded[i] = true;
+            if (loaded.every(l=>l)) {
+                ca.sa.showMessage('Completed Achievements Loaded');
+            }
+        }).fail(() => ca.sa.showMessage(`Completed Achievement Load page ${i} failed`));
     }
+}
+
+ca.sa.showMessage = function(message) {
+    $("#alert-message").text(message)
 }
 
 ca.sa.initializeCamperAchievement = function(campA) {
@@ -58,11 +74,6 @@ ca.sa.initializeCamperAchievement = function(campA) {
 }
 
 ca.sa.completedLoaded = function(data) {
-    data.completedAchievements.forEach(compA => {
-        if (compA.sessionKey != ca.sa.data.session.key) {
-            ca.sa.data.campers[compA.camperKey].completedAchievements.push(compA);
-        }
-    });
 }
 
 ca.sa.writeAlphabetical = function() {
@@ -203,7 +214,7 @@ ca.sa.showCamper = function(sc) {
             ca.sa.initializeCamperAchievement(sc.periods[periodIndex]);
             ca.sa.showCamper(sc);
             ca.sa.rewriteReport();
-        }).fail(() => window.alert(`Unable to save schedule update`));
+        }).fail(() => ca.sa.showMessage(`Unable to save schedule update`));
     });
 }
 
