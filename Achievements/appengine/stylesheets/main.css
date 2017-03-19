@@ -54,6 +54,15 @@ table {
     border: 2px solid #000000;
 }
 
+#side-content {
+    position: fixed;
+    right: 0;
+    top: 0;
+    padding: 20px;
+    overflow: auto;
+    bottom: 0;
+}
+
 .verticalTableHeader {
     text-align:center;
     white-space:nowrap;

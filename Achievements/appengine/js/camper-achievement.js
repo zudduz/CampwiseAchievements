@@ -66,6 +66,7 @@ ca.sa.completedLoaded = function(data) {
 }
 
 ca.sa.writeAlphabetical = function() {
+    ca.sa.rewriteReport = ca.sa.writeAlphabetical;
     let data = ca.sa.data;
     $('#content').html(`
             ${data.scheduleCampers.length} campers
@@ -83,6 +84,7 @@ ca.sa.writeAlphabetical = function() {
 }
 
 ca.sa.writeGroup = function() {
+    ca.sa.rewriteReport = ca.sa.writeGroup;
     let data = ca.sa.data;
     data.achievements.forEach(a => {
         a.periods = [];
@@ -144,13 +146,17 @@ ca.sa.writeGroup = function() {
 }
 
 ca.sa.showCamper = function(sc) {
-    $('#content').html(`
+    $('#side-content').html(`
+            <button id="closeCamper">Close camper</button><br/>
             <h3>${sc.camper.lastName}, ${sc.camper.firstName} (${sc.camper.cabin})</h3>
             <table>
                 <thead><tr>${ca.sa.periodsHeader()}<td>Name</td>
                 </tr></thead>
                 <tbody id="achievementRows"></tbody>
             </table>`);
+    $('#closeCamper').click(event => {
+        $('#side-content').html('');
+    });
     ca.sa.data.achievements.forEach((achievement, i) => {
         let completed = sc.completedAchievements.some(
                 (compA) => compA.passed && compA.sessionKey != ca.sa.data.session.key && compA.achievementKey == achievement.key);
@@ -196,6 +202,7 @@ ca.sa.showCamper = function(sc) {
             sc.periods[periodIndex] = data.camperAchievement;
             ca.sa.initializeCamperAchievement(sc.periods[periodIndex]);
             ca.sa.showCamper(sc);
+            ca.sa.rewriteReport();
         }).fail(() => window.alert(`Unable to save schedule update`));
     });
 }
