@@ -11,7 +11,8 @@ ca.sa.init = function() {
 
 ca.sa.campersLoaded = function(data) {
     ca.sa.data = data;
-    sessionStorage.caData = JSON.stringify(data);
+    //sessionStorage.caData = JSON.stringify(data);
+
     let camperKeys = [];
     data.campers = {};
     data.scheduleCampers.forEach(sc => {
@@ -32,6 +33,10 @@ ca.sa.campersLoaded = function(data) {
         data.campers[sc.camper.key] = sc;
         camperKeys.push(sc.camper.key)
     });
+
+    data.achievementIndex = {};
+    data.achievements.forEach((a, i) => data.achievementIndex[a.key] = i);
+
     ca.sa.writeAlphabetical();
 
     let pageSize = 50;
@@ -82,7 +87,53 @@ ca.sa.writeAlphabetical = function() {
 }
 
 ca.sa.writeGroup = function() {
-    $('#content').html(`Da group report`);
+    let data = ca.sa.data;
+    data.achievements.forEach(a => {
+        a.periods = [];
+        data.periods.forEach(p => a.periods.push([]));
+    });
+    data.scheduleCampers.forEach(sc => sc.periods.forEach(sessA => {
+        if (sessA) {
+            let achievement = data.achievements[ca.sa.data.achievementIndex[sessA.achievement.key]];
+            achievement.periods[ca.sa.periodIndex(sessA.period)].push(sessA);
+        }
+    }));
+    
+    $('#content').html('');
+    data.achievements.forEach((a, i) => {
+        $('#content').append(`
+                <b>${a.name}</b>
+                <table>
+                    <thead><tr>
+                        <td>SM</td>
+                        <td>TW</td>
+                        <td>RF</td>
+                    </tr></thead>
+                    <tbody id="camperRows${i}"></tbody>
+                </table><br/><br/>`);
+        let j = 0;
+        while (a.periods.some(p => p[j])) {
+            let periodsHtml = '';
+            a.periods.forEach(p => {
+                if (p[j]) {
+                    let camper = data.campers[p[j].camperKey].camper;
+                    periodsHtml += `
+                        <td class="camper-cell" data-camper-key="${p[j].camperKey}">
+                            ${camper.lastName}, ${camper.firstName}
+                        </td>
+                    `;
+                } else {
+                    periodsHtml += '<td></td>';
+                }
+            });
+            $(`#camperRows${i}`).append(`<tr>${periodsHtml}</tr>`);
+            j++;
+        }
+    });
+    $('.camper-cell').click(event => {
+        let camperKey = $(event.delegateTarget).data('camper-key');
+        ca.sa.showCamper(ca.sa.data.campers[camperKey]);
+    });
 }
 
 ca.sa.showCamper = function(sc) {
@@ -119,8 +170,8 @@ ca.sa.showCamper = function(sc) {
                     ${periodsHtml}<td>${achievement.name}</td>
                 </tr>`)
     });
-    $('td.achievementCheck').click(cell => {
-        cell = $(cell.delegateTarget)
+    $('td.achievementCheck').click(event => {
+        let cell = $(event.delegateTarget)
         scheduled = cell.data('scheduled');
         achievementKey = cell.data('achievement');
         period = cell.data('period');
@@ -138,7 +189,7 @@ ca.sa.showCamper = function(sc) {
                 cabin: sc.camper.cabin,
             }
         }).done(data => {
-            periodIndex = ca.sa.data.periods.findIndex((p) => p == period);
+            let periodIndex = ca.sa.periodIndex(period);
             sc.periods[periodIndex] = data.camperAchievement;
             ca.sa.initializeCamperAchievement(sc.periods[periodIndex]);
             ca.sa.showCamper(sc);
@@ -146,3 +197,6 @@ ca.sa.showCamper = function(sc) {
     });
 }
 
+ca.sa.periodIndex = function(period) {
+    return ca.sa.data.periods.findIndex((p) => p == period);
+}
