@@ -1,6 +1,8 @@
 <html>
   <head>
-    <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+      <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+      <script src="/js/jquery-3.1.1.min.js"></script>
+      <script src="/js/camper-achievement-index.js"></script>
   </head>
   <body>
   <p>Need technical assistance? Contact <a href="mailto:ben@steinbox.com">ben@steinbox.com</a>
@@ -9,62 +11,18 @@
   <a href="/schedule_start">Create Schedule for a Session</a><br/>
   <a href="/schedule_cabin_update">Update Cabin List for a Session</a><br/>
   <hr/>
-  <form action="/report_schedule_adjust" method="get">
-      <select name="session">
-          {% for session in sessions %}
-              <option value="{{session.key}}">{{session.name}}</option>
-          {% endfor %}
-      </select>
-      <input type="submit" value="Adjust Schedule"/>
-  </form>
-  <form action="/report_cabin_report" method="get">
-      <select name="session">
-          {% for session in sessions %}
-              <option value="{{session.key}}">{{session.name}}</option>
-          {% endfor %}
-      </select>
-      <input type="submit" value="Run Cabin Report"/>
-  </form>
-  <form action="/report_group_report" method="get">
-      <select name="session">
-          {% for session in sessions %}
-              <option value="{{session.key}}">{{session.name}}</option>
-          {% endfor %}
-      </select>
-      <input type="submit" value="Run Group Report"/>
-  </form>
-  <form action="/report_medal_report" method="get">
-      <select name="session">
-          {% for session in sessions %}
-              <option value="{{session.key}}">{{session.name}}</option>
-          {% endfor %}
-      </select>
-      <input type="submit" value="Run Medal Report"/>
-  </form>
-  <form action="/report_alphabetical_report" method="get">
-      <select name="session">
-          {% for session in sessions %}
-              <option value="{{session.key}}">{{session.name}}</option>
-          {% endfor %}
-      </select>
-      <input type="submit" value="Run Alphabetical Report"/>
-  </form>
-  <form action="/report_size_report" method="get">
-      <select name="session">
-          {% for session in sessions %}
-              <option value="{{session.key}}">{{session.name}}</option>
-          {% endfor %}
-      </select>
-      <input type="submit" value="Run Class Size Report"/>
-  </form>
-  <form action="/report_criteria_report" method="get">
-      <select name="session">
-          {% for session in sessions %}
-              <option value="{{session.key}}">{{session.name}}</option>
-          {% endfor %}
-      </select>
-      <input type="submit" value="Create Criteria Sheets"/>
-  </form>
+  <select id="sessionList" name="session">
+      {% for session in sessions %}
+          <option value="{{session.key}}">{{session.name}}</option>
+      {% endfor %}
+  </select><br/><br/>
+  <a href="#" class="reportLink" data-url="/report_schedule_adjust">Adjust Schedule</a><br/>
+  <a href="#" class="reportLink" data-url="/report_cabin_report">Run Cabin Report</a><br/>
+  <a href="#" class="reportLink" data-url="/report_group_report">Run Group Report</a><br/>
+  <a href="#" class="reportLink" data-url="/report_medal_report">Run Medal Report</a><br/>
+  <a href="#" class="reportLink" data-url="/report_alphabetical_report">Run Alphabetical Report</a><br/>
+  <a href="#" class="reportLink" data-url="/report_size_report">Run Class Size Report</a><br/>
+  <a href="#" class="reportLink" data-url="/report_criteria_report">Create Criteria Sheets</a><br/>
   <hr/>
   <a href="/camper_list">Camper List</a><br/>
   </body>

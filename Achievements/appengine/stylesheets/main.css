@@ -90,3 +90,7 @@ table.report.criteria td {
 table.report.criteria td.name {
     width: 200px;
 }
+
+a.reportLink {
+    line-height: 25px;
+}
