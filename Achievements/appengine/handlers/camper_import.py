@@ -26,10 +26,10 @@ class ReceiveImport(webapp.RequestHandler):
             iCamper.firstName = camperArr[1]
             iCamper.lastName = camperArr[2]
             iCamper.birthDate = util.string2Date(camperArr[3])
-            if camperArr[4] in ('', None):
+            if camperArr[5] in ('', None):
                 iCamper.cabin = None
             else:
-                iCamper.cabin = camperArr[4]
+                iCamper.cabin = camperArr[5]
             found = Camper.gql('WHERE campwiseId = :1', iCamper.campwiseId).get()
             if found:
                 iCamper.existingCamper = found

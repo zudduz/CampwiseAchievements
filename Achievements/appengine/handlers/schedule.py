@@ -19,11 +19,11 @@ class ScheduleCabinUpdate(webapp.RequestHandler):
         session = Session.get(self.request.get('session'))
         for camperLine in self.request.get('raw_csv').splitlines():
             camperArr = camperLine.split('|')
-            if len(camperArr) != 5:
+            if len(camperArr) != 6:
                 self.response.out.write('error')
             campwiseId = int(camperArr[0])
-            cabin = camperArr[4]
-            if camperArr[4] == '':
+            cabin = camperArr[5]
+            if camperArr[5] == '':
                 cabin = None
             camper = Camper.gql('WHERE campwiseId = :1', campwiseId).get()
             for camperAchievement in CamperAchievement.gql('where camper = :1', camper):
@@ -68,11 +68,11 @@ class ScheduleReview(webapp.RequestHandler):
         random.shuffle(camperLines)
         for camperLine in camperLines:
             camperArr = camperLine.split('|')
-            if len(camperArr) != 5:
+            if len(camperArr) != 6:
                 raise ValueError('Imported line \'' + str(camperLine) + '\' doesn\'t contain 4 |\'s')
             campwiseId = int(camperArr[0])
-            cabin = camperArr[4]
-            if camperArr[4] == '':
+            cabin = camperArr[5]
+            if camperArr[5] == '':
                 cabin = None
             camper = Camper.gql('WHERE campwiseId = :1', campwiseId).get()
             if not camper:
