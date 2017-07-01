@@ -121,7 +121,7 @@
                     </tr>
                     {% if duplicatedCamper.incomingCamper.existingCamper %}
                     <tr>
-                        <td>Existing</td>
+                        <td><a href="/camper_edit?key={{duplicatedCamper.incomingCamper.existingCamper.key}}">Existing</a></td>
                         <td>{{duplicatedCamper.incomingCamper.existingCamper.campwiseId}}</td>
                         <td>{{duplicatedCamper.incomingCamper.existingCamper.firstName}}</td>
                         <td>{{duplicatedCamper.incomingCamper.existingCamper.lastName}}</td>
