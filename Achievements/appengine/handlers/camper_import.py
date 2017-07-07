@@ -22,7 +22,7 @@ class ReceiveImport(webapp.RequestHandler):
         for camperStrings in self.request.get('raw_csv').splitlines():
             camperArr = camperStrings.split('|')
             iCamper = IncomingCamper()
-            iCamper.campwiseId = int(camperArr[0])
+            iCamper.campwiseId = int(camperArr[0].replace(',', ''))
             iCamper.firstName = camperArr[1]
             iCamper.lastName = camperArr[2]
             iCamper.birthDate = util.string2Date(camperArr[3])

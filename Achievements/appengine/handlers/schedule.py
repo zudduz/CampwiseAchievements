@@ -21,7 +21,7 @@ class ScheduleCabinUpdate(webapp.RequestHandler):
             camperArr = camperLine.split('|')
             if len(camperArr) != 6:
                 self.response.out.write('error')
-            campwiseId = int(camperArr[0])
+            campwiseId = int(camperArr[0].replace(',', ''))
             cabin = camperArr[5]
             if camperArr[5] == '':
                 cabin = None
@@ -70,7 +70,7 @@ class ScheduleReview(webapp.RequestHandler):
             camperArr = camperLine.split('|')
             if len(camperArr) != 6:
                 raise ValueError('Imported line \'' + str(camperLine) + '\' doesn\'t contain 4 |\'s')
-            campwiseId = int(camperArr[0])
+            campwiseId = int(camperArr[0].replace(',', ''))
             cabin = camperArr[5]
             if camperArr[5] == '':
                 cabin = None
