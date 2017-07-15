@@ -27,8 +27,13 @@ tr.completed {
     background-color: #99DD99;
 }
 
-td.scheduled {
+td.achievementCheck {
     text-align:center;
+    cursor: pointer;
+}
+
+td.scheduled {
+    background-color: #99FFFF;
 }
 
 thead tr:nth-child(1n+0) {

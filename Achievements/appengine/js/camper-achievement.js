@@ -78,6 +78,7 @@ ca.sa.completedLoaded = function(data) {
 
 ca.sa.writeAlphabetical = function() {
     ca.sa.rewriteReport = ca.sa.writeAlphabetical;
+    ca.sa.fleshAchievements();
     let data = ca.sa.data;
     $('#content').html(`
             ${data.scheduleCampers.length} campers
@@ -94,8 +95,7 @@ ca.sa.writeAlphabetical = function() {
     });
 }
 
-ca.sa.writeGroup = function() {
-    ca.sa.rewriteReport = ca.sa.writeGroup;
+ca.sa.fleshAchievements = function() {
     let data = ca.sa.data;
     data.achievements.forEach(a => {
         a.periods = [];
@@ -107,6 +107,11 @@ ca.sa.writeGroup = function() {
             achievement.periods[ca.sa.periodIndex(sessA.period)].push(sessA);
         }
     }));
+}
+ca.sa.writeGroup = function() {
+    ca.sa.rewriteReport = ca.sa.writeGroup;
+    let data = ca.sa.data;
+    ca.sa.fleshAchievements();
     
     $('#content').html('');
     $('#content').append(`
@@ -159,7 +164,7 @@ ca.sa.writeGroup = function() {
 ca.sa.showCamper = function(sc) {
     $('#side-content').html(`
             <button id="closeCamper">Close camper</button><br/>
-            <h3>${sc.camper.lastName}, ${sc.camper.firstName} (${sc.camper.cabin})</h3>
+            <h3>${sc.camper.lastName}, ${sc.camper.firstName} (${sc.camper.cabin || 'None'})</h3>
             <table>
                 <thead><tr>${ca.sa.periodsHeader()}<td>Name</td>
                 </tr></thead>
@@ -173,17 +178,15 @@ ca.sa.showCamper = function(sc) {
                 (compA) => compA.passed && compA.sessionKey != ca.sa.data.session.key && compA.achievementKey == achievement.key);
         
         let periodsHtml = '';
-        ca.sa.data.periods.forEach(period => {
+        ca.sa.data.periods.forEach((period, j) => {
             scheduled = sc.periods.some((compA) => compA && compA.period == period && compA.achievementKey == achievement.key);
             periodsHtml += `<td
                 class="achievementCheck ${scheduled ? 'scheduled' : ''}"
                 data-scheduled="${scheduled}"
                 data-period="${period}"
                 data-achievement="${achievement.key}">`;
-            if (scheduled) {
-                periodsHtml += '<img src="/images/checkmark.png" height="18"/>';
-            }
-            periodsHtml += '</td>'
+            periodsHtml += achievement.periods[j].length;
+            periodsHtml += '</td>';
         });
         $('#achievementRows').append(`
                 <tr class="${completed ? 'completed' : 'needed'}" id="achievementRow${i}">
