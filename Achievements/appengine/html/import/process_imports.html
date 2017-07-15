@@ -4,7 +4,7 @@
         <title>Import Campers</title>
     </head>
     <body>
-        <h2>New:</h2>
+        <h2>New: ({{newCampers|length}})</h2>
         The following campers look to be new:
         <table>
             <thead>
@@ -29,7 +29,7 @@
             </tbody>
         </table>
         <br/><br/>
-        <h2>Matched:</h2>
+        <h2>Matched: ({{existingCampers|length}})</h2>
         The following campers look to have successful matches:
         <table>
             <thead>
@@ -54,7 +54,7 @@
             </tbody>
         </table>
         <br/><br/>
-        <h2>Renames:</h2>
+        <h2>Renames: ({{renamedCampers|length}})</h2>
         The following campers have conflicting attributes. Their incoming info doesn't match what's in the database.<br/>
         They may have had a legitimate change such as name change due to adoption or a corrected typo.<br/>
         Or a parent may be attempting to switch the camper that an account has been set up for.<br/>
@@ -96,7 +96,7 @@
         </table>
      
         <br/><br/>
-        <h2>Duplicates:</h2>
+        <h2>Duplicates: ({{duplicatedCampers|length}})</h2>
         The following campers appear to be duplicates of another account we already have.<br/>
         It could be a legitimate appearance of a duplicate.  Such as a twin with the same last name and birthdate.<br/>
         Or a parent may have been locked out of their old account and be trying to establish a new account.<br/>
