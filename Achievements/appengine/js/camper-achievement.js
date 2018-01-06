@@ -215,8 +215,8 @@ ca.sa.showCamper = function(sc) {
             let periodIndex = ca.sa.periodIndex(period);
             sc.periods[periodIndex] = data.camperAchievement;
             ca.sa.initializeCamperAchievement(sc.periods[periodIndex]);
-            ca.sa.showCamper(sc);
             ca.sa.rewriteReport();
+            ca.sa.showCamper(sc);
         }).fail(() => ca.sa.showMessage(`Unable to save schedule update`));
     });
 }
