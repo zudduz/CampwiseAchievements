@@ -8,8 +8,8 @@
             The following medals are expected to be earned during {{session.name}} starting {{session.startDate}}
             {% for camperBadge in camperBadges %}
                 <tr>
-                    <td>{{camperBadge.badge.name}}</td>
                     <td>{{camperBadge.camper.firstName}} {{camperBadge.camper.lastName}}</td>
+                    <td>{{camperBadge.badge.name}}</td>
                 </tr>
             {% endfor %}
         </table>

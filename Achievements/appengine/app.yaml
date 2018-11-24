@@ -1,6 +1,7 @@
+#instead use --project and --version flag on gcloud command
 #application: campwise-achievements-hrd
-application: campwise-achievements-sandbox
-version: 1
+#application: campwise-achievements-sandbox
+#version: 1
 runtime: python27
 api_version: 1
 threadsafe: true

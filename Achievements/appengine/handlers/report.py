@@ -20,8 +20,8 @@ class ReportCabinReport(webapp.RequestHandler):
         camperAchievements = CamperAchievement.gql('where session = :1 order by cabin', session)
         camperAchievements = sorted(camperAchievements, key=lambda camperAchievement:(
                 camperAchievement.cabin, 
-                camperAchievement.camper.firstName.upper(),
                 camperAchievement.camper.lastName.upper(),
+                camperAchievement.camper.firstName.upper(),
                 periods.index(camperAchievement.period)))
         cabinReportRoot = CabinReportRoot()
         for camperAchievement in camperAchievements:
@@ -233,8 +233,8 @@ class ReportGroupReport(webapp.RequestHandler):
         camperAchievements = sorted(camperAchievements, key=lambda camperAchievement:(
                 camperAchievement.achievement.level,
                 periods.index(camperAchievement.period),
-                camperAchievement.camper.firstName.upper(),
-                camperAchievement.camper.lastName.upper()))
+                camperAchievement.camper.lastName.upper(),
+                camperAchievement.camper.firstName.upper()))
 
         groupReportRoot = GroupReportRoot()
         for camperAchievement in camperAchievements:
@@ -306,7 +306,7 @@ class ReportMedalReport(webapp.RequestHandler):
         for camper in camperListByCampwiseId.values():
             previousAchievements = {}
             currentAchievements = {}
-            for camperAchievement in CamperAchievement.gql('where camper = :1', camper):
+            for camperAchievement in CamperAchievement.gql('where camper = :1 and passed = true', camper):
                 if (not camperAchievement.session) or camperAchievement.session.startDate < session.startDate:
                     previousAchievements[camperAchievement.achievement.level] = camperAchievement.achievement
                 elif session.key() == camperAchievement.session.key():
@@ -323,7 +323,7 @@ class ReportMedalReport(webapp.RequestHandler):
             for badgeLevel in newBadgeLevels:
                 camperBadges.append(CamperBadge(camper, badgesByLevel[badgeLevel]))
 
-            camperBadges = sorted(camperBadges, key=lambda camperBadge:(camperBadge.badge.level, camperBadge.camper.firstName.upper(), camperBadge.camper.lastName.upper()))
+            camperBadges = sorted(camperBadges, key=lambda camperBadge:(camperBadge.camper.lastName.upper(), camperBadge.camper.firstName.upper()))
                 
         template_values = {'camperBadges': camperBadges, 'session': session}
         path = os.path.join(os.path.dirname(__file__), '../html/report/medal_report.html')
@@ -364,8 +364,8 @@ def generateCriteriaReportRoot(sessionParam):
     camperAchievements = sorted(camperAchievements, key=lambda camperAchievement:(
             camperAchievement.achievement.level,
             periods.index(camperAchievement.period),
-            camperAchievement.camper.firstName.upper(),
-            camperAchievement.camper.lastName.upper()))
+            camperAchievement.camper.lastName.upper(),
+            camperAchievement.camper.firstName.upper()))
 
     criteriaReportRoot = CriteriaReportRoot()
     for camperAchievement in camperAchievements:
