@@ -13,15 +13,19 @@ handlers:
 - url: /stylesheets
   static_dir: stylesheets
   login: admin
+  secure: always
 
 - url: /js
   static_dir: js
   login: admin
+  secure: always
 
 - url: /images
   static_dir: images
   login: admin
+  secure: always
 
 - url: /.*
   script: main.app
   login: admin
+  secure: always
